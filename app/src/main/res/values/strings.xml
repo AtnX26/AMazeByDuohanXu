@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">AMazeByDuohanXu</string>
+    <string name="welcome">Welcome to the Maze</string>
+    <string-array name="builder">
+        <item>DFS</item>
+        <item>Prim</item>
+        <item>Boruvka</item>
+    </string-array>
+    <string-array name="driver">
+        <item>Manual</item>
+        <item>Wizard</item>
+        <item>Wallfollower</item>
+    </string-array>
 </resources>
