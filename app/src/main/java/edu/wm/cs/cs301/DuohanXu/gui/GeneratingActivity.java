@@ -1,5 +1,7 @@
 package edu.wm.cs.cs301.DuohanXu.gui;
 
+
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,17 +9,14 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,19 +30,86 @@ public class GeneratingActivity extends AppCompatActivity {
     private static int progress;
     private ProgressBar progressBar;
     private int progressStatus = 0;
-    private RadioGroup radioDriver;
-    private RadioButton driverButton;
     private String selectedDriver;
     private String selectedRobot;
+    private String tag = "GeneratingActivity";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Not used now, but will work with Project 7
         Bundle bundle = getIntent().getExtras();
         setContentView(R.layout.activity_generating);
+        RadioGroup radioDriver = (RadioGroup)findViewById(R.id.radioDriver) ;
+        RadioGroup radioRobot = (RadioGroup)findViewById(R.id.radioRobot) ;
 
-        radioDriver = findViewById(R.id.radioDriver);
+        RadioButton rManual = (RadioButton)findViewById(R.id.radioManual);
+        RadioButton rWizard = (RadioButton)findViewById(R.id.radioWizard);
+        RadioButton rWallFollower = (RadioButton)findViewById(R.id.radioWallFollower);
+        RadioButton rPremium = (RadioButton)findViewById(R.id.radioPremium);
+        RadioButton rMediocre = (RadioButton)findViewById(R.id.radioMediocre);
+        RadioButton rSoso = (RadioButton)findViewById(R.id.radioSoso);
+        RadioButton rShaky = (RadioButton)findViewById(R.id.radioShaky);
 
+        Button confirmDriver = (Button) findViewById(R.id.buttondriver);
+        confirmDriver.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (rManual.isChecked()) {
+                    Log.v(tag,"Manual driver selected");
+                    selectedDriver = rManual.getText().toString();
+                    if (progress<200) Toast.makeText(getBaseContext(), "Driver confirmed, please wait until the maze is generated", Toast.LENGTH_SHORT).show();
+                }
+                else if (rWizard.isChecked()) {
+                    Log.v(tag,"Wizard driver selected");
+                    selectedDriver = rWizard.getText().toString();
+                    if (progress<200) Toast.makeText(getBaseContext(), "Driver confirmed, please wait until the maze is generated", Toast.LENGTH_SHORT).show();
+                }
+                else if (rWallFollower.isChecked()) {
+                    Log.v(tag,"WallFollower driver selected");
+                    selectedDriver = rWallFollower.getText().toString();
+                    if (progress<200) Toast.makeText(getBaseContext(), "Driver confirmed, please wait until the maze is generated", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Log.v(tag,"No driver selected");
+                    Toast.makeText(getBaseContext(), "Please confirm a driver!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
+
+        Button confirmRobot = (Button) findViewById(R.id.buttonRobot);
+        confirmRobot.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (rPremium.isChecked()) {
+                    Log.v(tag,"Premium robot selected");
+                    selectedRobot = rPremium.getText().toString();
+                    if (progress<200) Toast.makeText(getBaseContext(), "Robot confirmed, please wait until the maze is generated", Toast.LENGTH_SHORT).show();
+                }
+                else if (rMediocre.isChecked()) {
+                    Log.v(tag,"Mediocre robot selected");
+                    selectedRobot = rMediocre.getText().toString();
+                    if (progress<200) Toast.makeText(getBaseContext(), "Robot confirmed, please wait until the maze is generated", Toast.LENGTH_SHORT).show();
+                }
+                else if (rSoso.isChecked()) {
+                    Log.v(tag,"Soso robot selected");
+                    selectedRobot = rSoso.getText().toString();
+                    if (progress<200) Toast.makeText(getBaseContext(), "Robot confirmed, please wait until the maze is generated", Toast.LENGTH_SHORT).show();
+                }
+                else if (rShaky.isChecked()) {
+                    Log.v(tag,"Shaky robot selected");
+                    selectedRobot = rShaky.getText().toString();
+                    if (progress<200) Toast.makeText(getBaseContext(), "Robot confirmed, please wait until the maze is generated", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Log.v(tag,"No robot selected");
+                    Toast.makeText(getBaseContext(), "Please confirm a robot!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
 
@@ -58,6 +124,8 @@ public class GeneratingActivity extends AppCompatActivity {
                     progressStatus = doSomeWork();
                     handler.post(() -> progressBar.setProgress(progressStatus));
                 }
+                Log.v(tag, "Progress bar completed");
+
 
             }
             private int doSomeWork() {
@@ -70,13 +138,19 @@ public class GeneratingActivity extends AppCompatActivity {
             }
         }).start();
 
+
         Button btn = (Button)findViewById(R.id.StartMaze);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selectedDriver.equals("Wall Follower")||selectedDriver.equals("Wizard")) {
+                Log.v(tag, "Start button clicked");
+                if (progress<200) Toast.makeText(getBaseContext(), "Please wait, the maze is generating!", Toast.LENGTH_SHORT).show();
+                else if (selectedDriver == null) Toast.makeText(getBaseContext(), "Please select the driver first!", Toast.LENGTH_SHORT).show();
+                else if (selectedDriver.equals("Wall Follower")||selectedDriver.equals("Wizard")) {
+                    if (selectedRobot == null){Toast.makeText(getBaseContext(), "Please select a robot first!", Toast.LENGTH_SHORT).show();}
+                    else{
                     Intent intent = new Intent(getApplicationContext(), PlayAnimationActivity.class);
-                    startActivity(intent);
+                    startActivity(intent);}
                 }
                 else {
                     Intent intent = new Intent(getApplicationContext(), PlayManuallyActivity.class);
@@ -84,6 +158,11 @@ public class GeneratingActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    public void onBackPressed(){
+        Log.v(tag, "back button pressed in Generating Activity");
+        super.onBackPressed();
     }
     }
 

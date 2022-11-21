@@ -10,7 +10,7 @@
         android:layout_width="277dp"
         android:layout_height="182dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="84dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,18 +30,21 @@
                 android:id="@+id/radioManual"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:checked="false"
                 android:text="Manual" />
 
             <RadioButton
                 android:id="@+id/radioWizard"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:checked="false"
                 android:text="Wizard" />
 
             <RadioButton
                 android:id="@+id/radioWallFollower"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:checked="false"
                 android:text="WallFollower" />
 
         </RadioGroup>
@@ -49,10 +52,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="276dp"
-        android:layout_height="167dp"
+        android:layout_width="278dp"
+        android:layout_height="222dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="316dp"
+        android:layout_marginTop="268dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -64,26 +67,37 @@
             android:text="Select a robot level:" />
 
         <RadioGroup
+            android:id="@+id/radioRobot"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <RadioButton
-                android:id="@+id/radioButton12"
+                android:id="@+id/radioPremium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="RadioButton" />
+                android:text="Premium"
+                android:checked="false"/>
 
             <RadioButton
-                android:id="@+id/radioButton13"
+                android:id="@+id/radioMediocre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="RadioButton" />
+                android:text="Mediocre"
+                android:checked="false"/>
 
             <RadioButton
-                android:id="@+id/radioButton14"
+                android:id="@+id/radioSoso"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="RadioButton" />
+                android:text="Soso"
+                android:checked="false"/>
+
+            <RadioButton
+                android:id="@+id/radioShaky"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Shaky"
+                android:checked="false"/>
         </RadioGroup>
 
     </LinearLayout>
@@ -121,6 +135,26 @@
         android:layout_marginStart="17dp"
         android:layout_marginTop="21dp"
         android:text="Please wait, maze generating..."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttondriver"
+        android:layout_width="102dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="296dp"
+        android:layout_marginTop="136dp"
+        android:text="Confirm driver"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/buttonRobot"
+        android:layout_width="105dp"
+        android:layout_height="74dp"
+        android:layout_marginStart="296dp"
+        android:layout_marginTop="348dp"
+        android:text="Confirm Robot"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
