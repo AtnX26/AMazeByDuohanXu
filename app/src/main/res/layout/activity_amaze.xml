@@ -21,8 +21,8 @@
         android:id="@+id/complexity"
         android:layout_width="275dp"
         android:layout_height="34dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="360dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="356dp"
         android:max="9"
         android:progress="0"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,8 +32,8 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="337dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="340dp"
         android:text="Maze Complexity:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -52,17 +52,17 @@
         android:id="@+id/Explore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="237dp"
+        android:layout_marginStart="256dp"
         android:layout_marginTop="556dp"
         android:text="Explore"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="133dp"
-        android:layout_height="103dp"
-        android:layout_marginStart="33dp"
-        android:layout_marginTop="405dp"
+        android:layout_width="154dp"
+        android:layout_height="100dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="404dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -76,7 +76,30 @@
         <Spinner
             android:id="@+id/builderSpinner"
             android:layout_width="125dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="135dp"
+        android:layout_height="99dp"
+        android:layout_marginStart="220dp"
+        android:layout_marginTop="404dp"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Maze include rooms" />
+
+        <Spinner
+            android:id="@+id/roomSpinner"
+            android:layout_width="124dp"
+            android:layout_height="29dp" />
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
