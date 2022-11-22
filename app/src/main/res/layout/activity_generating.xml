@@ -75,29 +75,29 @@
                 android:id="@+id/radioPremium"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Premium"
-                android:checked="false"/>
+                android:checked="false"
+                android:text="Premium" />
 
             <RadioButton
                 android:id="@+id/radioMediocre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Mediocre"
-                android:checked="false"/>
+                android:checked="false"
+                android:text="Mediocre" />
 
             <RadioButton
                 android:id="@+id/radioSoso"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Soso"
-                android:checked="false"/>
+                android:checked="false"
+                android:text="Soso" />
 
             <RadioButton
                 android:id="@+id/radioShaky"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Shaky"
-                android:checked="false"/>
+                android:checked="false"
+                android:text="Shaky" />
         </RadioGroup>
 
     </LinearLayout>
@@ -155,6 +155,16 @@
         android:layout_marginStart="296dp"
         android:layout_marginTop="348dp"
         android:text="Confirm Robot"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="588dp"
+        android:text=""
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

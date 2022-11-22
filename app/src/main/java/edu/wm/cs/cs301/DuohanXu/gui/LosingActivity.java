@@ -1,7 +1,11 @@
 package edu.wm.cs.cs301.DuohanXu.gui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -48,6 +52,13 @@ public class LosingActivity extends AppCompatActivity {
                 startActivity(back2Title);
             }
         });
+
+        Vibrator v= (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            v.vibrate(500);
+        }
 
     }
 

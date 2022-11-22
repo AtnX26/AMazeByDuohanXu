@@ -21,7 +21,7 @@ public class AMazeActivity extends AppCompatActivity {
     private Intent intent;
 
     private int skilllevel;
-    private int seed;
+    private int seed = 1;
     private String tag = "AMazeActivity";
     private Spinner spinner;
     private Spinner roomSpinner;
@@ -58,6 +58,7 @@ public class AMazeActivity extends AppCompatActivity {
         });
         spinner = setSpinner();
         roomSpinner = setRoomSpinner();
+
         Button revisitButton = (Button) findViewById(R.id.Revisit);
         revisitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +69,11 @@ public class AMazeActivity extends AppCompatActivity {
                 /*
                 Put information from the last game into the bundle and pass it to the next activity
                  */
+                //A default seed is used here; should get the seed from the container in P7
+                bundle.putInt("Seed", seed);
+                bundle.putInt("Complexity",seekbar.getProgress());
+                bundle.putString("Algorithm",spinner.getSelectedItem().toString());
+                bundle.putString("Room", roomSpinner.getSelectedItem().toString());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -86,6 +92,12 @@ public class AMazeActivity extends AppCompatActivity {
                 /*
                 Put information from the last game into the bundle and pass it to the next activity
                  */
+                //Give it a new seed
+                int newSeed = 3;
+                bundle.putInt("Seed", seed);
+                bundle.putInt("Complexity",seekbar.getProgress());
+                bundle.putString("Algorithm",spinner.getSelectedItem().toString());
+                bundle.putString("Room", roomSpinner.getSelectedItem().toString());
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
