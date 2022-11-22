@@ -9,6 +9,11 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
 
+/**
+ *Additional class for the activity: drawing the maze
+ *
+ * @author DuohanXu
+ */
 
 public class MazePanel extends View {
     private Bitmap bitmap;
@@ -17,6 +22,11 @@ public class MazePanel extends View {
     private int color;
     private boolean ManorAni;
 
+    /**
+     * Initiates the paint, bitmap and canvas for drawing
+     * @param context
+     * @param attrs
+     */
     public MazePanel(Context context, AttributeSet attrs) {
         super(context, attrs);
         paint = new Paint();
@@ -25,6 +35,10 @@ public class MazePanel extends View {
 
     }
 
+    /**
+     * The private method for drawing required images for P6
+     * @param c
+     */
     private void p6Test(Canvas c){
 
 
@@ -33,7 +47,7 @@ public class MazePanel extends View {
 
         setColor(Color.GRAY);
         DrawRectangle(0, 500, 1000, 500);
-
+        //If false (PlayAnimationActivity), show two polygons
         if (ManorAni == false) {
             setColor(Color.GREEN);
             int[] x = new int[]{0, 300, 300, 0};
@@ -46,17 +60,26 @@ public class MazePanel extends View {
             DrawPolygon(x2, y2, 4);
         }
 
+        //If true (PlayManuallyActivity), show a red ball
         if (ManorAni == true) {
             setColor(Color.RED);
             DrawOval(300, 300, 400, 400);
         }
     }
 
+    /**
+     * Helper method to set color to the painter
+     * @param rgb
+     */
     public void setColor(int rgb) {
         paint.setColor(rgb);
         color = rgb;
     }
 
+    /**
+     * Start drawing process
+     * @param canvas
+     */
     @Override
     public void onDraw(Canvas canvas) {
         p6Test(canvas);
@@ -64,7 +87,13 @@ public class MazePanel extends View {
         canvas.drawBitmap(bitmap,0,0, null);
     }
 
-
+    /**
+     * Helper method to draw an oval (or a circle if x=y)
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     */
     public void DrawOval(int x, int y, int width, int height) {
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         float right = width + x;
@@ -72,6 +101,14 @@ public class MazePanel extends View {
         canvas.drawOval((float) x, (float) y, right, bottom, paint);
 
     }
+
+    /**
+     * Helper method to draw a rectangle
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     */
     public void DrawRectangle(int x, int y, int width, int height) {
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         float right = x + width;
@@ -79,6 +116,12 @@ public class MazePanel extends View {
         canvas.drawRect((float) x, (float) y, right, bottom, paint);
     }
 
+    /**
+     * Helper method to draw a polygon
+     * @param xPoints
+     * @param yPoints
+     * @param nPoints
+     */
     public void DrawPolygon(int[] xPoints, int[] yPoints, int nPoints) {
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         Path path = new Path();
@@ -94,6 +137,10 @@ public class MazePanel extends View {
 
     }
 
+    /**
+     * Public method to set the boolean ManorAni
+     * @param set
+     */
     public void setManorAni(boolean set){
         ManorAni = set;
     }

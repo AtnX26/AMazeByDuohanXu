@@ -24,6 +24,11 @@ import java.util.List;
 
 import edu.wm.cs.cs301.DuohanXu.R;
 
+/**
+ *Second class for the activity: loading page of the maze app
+ *
+ * @author DuohanXu
+ */
 public class GeneratingActivity extends AppCompatActivity {
 
     private Handler handler;
@@ -35,7 +40,10 @@ public class GeneratingActivity extends AppCompatActivity {
     private String selectedRobot;
     private String tag = "GeneratingActivity";
 
-
+    /**
+     * Creates the activity by assigning view elements their jobs
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +52,9 @@ public class GeneratingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_generating);
         Log.v(tag,"created");
 
+        /**
+         * Set up a bunch of RadioGroup and RadioButton objects
+         */
         RadioGroup radioDriver = (RadioGroup)findViewById(R.id.radioDriver) ;
         RadioGroup radioRobot = (RadioGroup)findViewById(R.id.radioRobot) ;
 
@@ -56,6 +67,11 @@ public class GeneratingActivity extends AppCompatActivity {
         RadioButton rShaky = (RadioButton)findViewById(R.id.radioShaky);
         TextView text = (TextView) findViewById(R.id.textView16);
 
+        /**
+         * Set up a button to confirm selection.
+         * The player has to press this button to complete selection on the RadioButton for drivers;
+         * otherwise, no input will be recorded.
+         */
         Button confirmDriver = (Button) findViewById(R.id.buttondriver);
         confirmDriver.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +92,7 @@ public class GeneratingActivity extends AppCompatActivity {
                     if (progress<100) Toast.makeText(getBaseContext(), "Driver confirmed, please wait until the maze is generated", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    //Pops up a message to remind the player to select a driver
                     Log.v(tag,"No driver selected");
                     Toast.makeText(getBaseContext(), "Please select a driver!", Toast.LENGTH_SHORT).show();
                 }
@@ -83,7 +100,11 @@ public class GeneratingActivity extends AppCompatActivity {
         });
 
 
-
+        /**
+         * Set up a button to confirm selection.
+         * The player has to press this button to complete selection on the RadioButton for robots;
+         * otherwise, no input will be recorded.
+         */
         Button confirmRobot = (Button) findViewById(R.id.buttonRobot);
         confirmRobot.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +130,7 @@ public class GeneratingActivity extends AppCompatActivity {
                     if (progress<100) Toast.makeText(getBaseContext(), "Robot confirmed, please wait until the maze is generated", Toast.LENGTH_SHORT).show();
                 }
                 else {
+                    //Pops up a message to remind the player to select a driver
                     Log.v(tag,"No robot selected");
                     Toast.makeText(getBaseContext(), "Please select a robot!", Toast.LENGTH_SHORT).show();
                 }
@@ -116,12 +138,18 @@ public class GeneratingActivity extends AppCompatActivity {
         });
 
 
-
-
+        /**
+         * The progress bar for showing the progress of generating the maze.
+         * In P6, implement a thread that imitates the generating process instead.
+         */
         progress = 0;
         progressBar = (ProgressBar) findViewById(R.id.generatingProgress);
         progressBar.setMax(100);
         handler = new Handler(Looper.getMainLooper());
+        /**
+         * The thread that updates the progress bar every 50 ms.
+         * Stops when the progress reaches 100.
+         */
         new Thread(new Runnable() {
             public void run() {
                 while (progressStatus < 100) {
@@ -129,6 +157,10 @@ public class GeneratingActivity extends AppCompatActivity {
                     handler.post(() -> progressBar.setProgress(progressStatus));
                 }
                 Log.v(tag, "Progress bar completed");
+                /**
+                 * If the maze is generated before the player makes a selection of the driver:
+                 * Show a message as text above the start button.
+                 */
                 if (selectedDriver == null){
 
                     handler.post(() -> text.setText("Maze generated, don't forget to pick a driver!"));
@@ -146,16 +178,37 @@ public class GeneratingActivity extends AppCompatActivity {
             }
         }).start();
 
-
+        /**
+         * Set up the button to start playing the maze.
+         * Read attributes from the parent class and determine whether PlayManuallyActivity
+         * or PlayAnimationActivity will be called up.
+         */
         Button btn = (Button)findViewById(R.id.StartMaze);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.v(tag, "Start button clicked");
-                if (progress<100) Toast.makeText(getBaseContext(), "Please wait, the maze is generating!", Toast.LENGTH_SHORT).show();
-                else if (selectedDriver == null) Toast.makeText(getBaseContext(), "Please select the driver first!", Toast.LENGTH_SHORT).show();
+                /**
+                 * If clicked before the maze is delivered, pops up a message to remind the player.
+                 */
+                if (progress<100) {
+                    Toast.makeText(getBaseContext(), "Please wait, the maze is generating!", Toast.LENGTH_SHORT).show();
+                    Log.v(tag, "Waiting message popped up");
+                }
+                /**
+                 * If the maze generation is completed but the driver has yet to be selected, pop up another message
+                 */
+                else if (selectedDriver == null) {
+                    Toast.makeText(getBaseContext(), "Please select the driver first!", Toast.LENGTH_SHORT).show();
+                    Log.v(tag, "Selection reminder popped up");
+                }
+                /**
+                 * Handles scenarios in which PlayAnimationActivity will be called
+                 */
                 else if (selectedDriver.equals("Wall Follower")||selectedDriver.equals("Wizard")) {
-                    if (selectedRobot == null){Toast.makeText(getBaseContext(), "Please select a robot first!", Toast.LENGTH_SHORT).show();}
+                    if (selectedRobot == null){
+                        Toast.makeText(getBaseContext(), "Please select a robot first!", Toast.LENGTH_SHORT).show();
+                        Log.v(tag, "Selection reminder popped up");}
                     else{
                     Intent intent = new Intent(getApplicationContext(), PlayAnimationActivity.class);
                     bundle.putString("Driver", selectedDriver);
@@ -163,6 +216,9 @@ public class GeneratingActivity extends AppCompatActivity {
                     intent.putExtras(bundle);
                     startActivity(intent);}
                 }
+                /**
+                 * Handles scenarios in which PlayManuallyActivity will be called
+                 */
                 else {
                     Intent intent = new Intent(getApplicationContext(), PlayManuallyActivity.class);
                     bundle.putString("Driver", selectedDriver);
@@ -172,6 +228,10 @@ public class GeneratingActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Go back to the title
+     */
     @Override
     public void onBackPressed(){
         Log.v(tag, "back button pressed in Generating Activity");

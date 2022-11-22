@@ -12,24 +12,47 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import edu.wm.cs.cs301.DuohanXu.R;
 
+/**
+ *Third class for the activity: playing the maze manually
+ *
+ * @author DuohanXu
+ */
+
 public class PlayManuallyActivity extends AppCompatActivity {
     private String tag = "PlayManuallyActivity";
     private MazePanel mazePanel;
     private int pathlegnth;
 
+    /**
+     * Creates the activity by assigning view elements their jobs
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_manually);
         Log.v(tag,"created");
 
+        /**
+         * Start drawing process encapsulated in the MazePanel class
+         */
         final MazePanel panel = (MazePanel) findViewById(R.id.ManualMazePanel);
+        //Set the boolean to true so that the panel will deliver the image with a ball and
+        //two rectangles.
         panel.setManorAni(true);
+        Log.v(tag,"MazePanel started");
+
         pathlegnth = 0;
 
 
+        /**
+         * Four navigation buttons below: the player can use these buttons to operate
+         * the maze game by going forward, turning to the left or right, and jump over
+         * the wall
+         */
         Button buttonLeft = (Button) findViewById(R.id.buttonLeft);
         buttonLeft.setOnClickListener(new View.OnClickListener() {
+            //Create new event when clicked; only shows log for P6
             @Override
             public void onClick(View v) {
                 Log.v(tag, "left clicked");
@@ -38,6 +61,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
         Button buttonRight = (Button) findViewById(R.id.buttonRight);
         buttonRight.setOnClickListener(new View.OnClickListener() {
+            //Create new event when clicked; only shows log for P6
             @Override
             public void onClick(View v) {
                 Log.v(tag, "right clicked");
@@ -46,6 +70,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
         Button buttonForward = (Button) findViewById(R.id.buttonForward);
         buttonForward.setOnClickListener(new View.OnClickListener() {
+            //Create new event when clicked; only shows log for P6
             @Override
             public void onClick(View v) {
                 Log.v(tag, "forward clicked");
@@ -55,6 +80,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
         Button buttonJump = (Button) findViewById(R.id.buttonJump);
         buttonJump.setOnClickListener(new View.OnClickListener() {
+            //Create new event when clicked; only shows log for P6
             @Override
             public void onClick(View v) {
                 Log.v(tag, "jump clicked");
@@ -62,8 +88,12 @@ public class PlayManuallyActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * The short cut to the WinningActivity
+         */
         Button ShortCut = (Button) findViewById(R.id.ShortCut);
         ShortCut.setOnClickListener(new View.OnClickListener() {
+            //Create new event when clicked; only shows log for P6
             @Override
             public void onClick(View v) {
                 Log.v(tag, "ShortCut clicked, jump to the winning state");
@@ -71,8 +101,12 @@ public class PlayManuallyActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Three toggles that adjust the visibility of maze ,etc.
+         */
         ToggleButton showMap = (ToggleButton) findViewById(R.id.toggleMap);
         showMap.setOnClickListener(new View.OnClickListener() {
+            //Create new event when clicked; only shows log for P6
             @Override
             public void onClick(View v) {
                 if (showMap.isChecked() == false){
@@ -86,6 +120,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
         ToggleButton showSolution = (ToggleButton) findViewById(R.id.toggleSolution);
         showSolution.setOnClickListener(new View.OnClickListener() {
+            //Create new event when clicked; only shows log for P6
             @Override
             public void onClick(View v) {
                 if (showSolution.isChecked() == false){
@@ -99,6 +134,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
         ToggleButton showWall = (ToggleButton) findViewById(R.id.toggleWalls);
         showWall.setOnClickListener(new View.OnClickListener() {
+            //Create new event when clicked; only shows log for P6
             @Override
             public void onClick(View v) {
                 if (showWall.isChecked() == false){
@@ -110,6 +146,9 @@ public class PlayManuallyActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Seek bar for adjusting the map size. Communicate with the MazePanel later in P7
+         */
         final SeekBar mapSize = (SeekBar) findViewById(R.id.seekBarMapSize);
         mapSize.setMin(1);
         mapSize.setProgress(10);
@@ -132,6 +171,10 @@ public class PlayManuallyActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Private helper method for the short cut
+     * @param view
+     */
     private void startWinningActivity(View.OnClickListener view){
         Intent intent = new Intent(this, WinningActivity.class);
         int energyConsumed = -1;
@@ -144,6 +187,9 @@ public class PlayManuallyActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    /**
+     * Navigate back to the title page once the back button is clicked
+     */
     @Override
     public void onBackPressed(){
         Log.v(tag, "back button pressed, going back to AMazeActivity");
