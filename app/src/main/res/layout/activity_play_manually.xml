@@ -3,87 +3,157 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".gui.PlayManuallyActivity">
 
     <Button
         android:id="@+id/ShortCut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="148dp"
-        android:layout_marginTop="664dp"
+        android:layout_marginTop="676dp"
         android:text="ShortCut"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="158dp"
-        android:layout_marginTop="506dp"
-        android:text="Button"
+        android:id="@+id/buttonForward"
+        android:layout_width="118dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="560dp"
+        android:text="Forward"
+        android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="554dp"
-        android:text="Button"
+        android:id="@+id/buttonLeft"
+        android:layout_width="98dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="584dp"
+        android:text="Left"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="252dp"
-        android:layout_marginTop="554dp"
-        android:text="Button"
+        android:id="@+id/buttonRight"
+        android:layout_width="98dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="268dp"
+        android:layout_marginTop="584dp"
+        android:text="Right"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="156dp"
-        android:layout_marginTop="593dp"
-        android:text="Button"
+        android:id="@+id/buttonJump"
+        android:layout_width="118dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="608dp"
+        android:text="Jump"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ToggleButton
-        android:id="@+id/toggleButton"
+        android:id="@+id/toggleMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="28dp"
+        android:checked="false"
         android:text="ToggleButton"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="16dp" />
+        android:textOff="Off"
+        android:textOn="On"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ToggleButton
-        android:id="@+id/toggleButton2"
+        android:id="@+id/toggleSolution"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="28dp"
+        android:checked="false"
         android:text="ToggleButton"
-        tools:layout_editor_absoluteX="88dp"
-        tools:layout_editor_absoluteY="16dp" />
+        android:textOff="Off"
+        android:textOn="On"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ToggleButton
-        android:id="@+id/toggleButton3"
+        android:id="@+id/toggleWalls"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="28dp"
+        android:checked="false"
         android:text="ToggleButton"
-        tools:layout_editor_absoluteX="235dp"
-        tools:layout_editor_absoluteY="16dp" />
+        android:textOff="Off"
+        android:textOn="On"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton4"
+    <SeekBar
+        android:id="@+id/seekBarMapSize"
+        android:layout_width="324dp"
+        android:layout_height="29dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="116dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ToggleButton"
-        tools:layout_editor_absoluteX="323dp"
-        tools:layout_editor_absoluteY="16dp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="83dp"
+        android:text="Map Size"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        android:text="Show Map"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="99dp"
+        android:layout_marginTop="9dp"
+        android:text="Show Solution"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="222dp"
+        android:layout_marginTop="9dp"
+        android:text="Show Visible Walls"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <edu.wm.cs.cs301.DuohanXu.gui.MazePanel
+        android:id="@+id/ManualMazePanel"
+        android:layout_width="381dp"
+        android:layout_height="381dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="168dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

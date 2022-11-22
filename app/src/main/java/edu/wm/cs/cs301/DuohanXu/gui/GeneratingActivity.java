@@ -150,10 +150,12 @@ public class GeneratingActivity extends AppCompatActivity {
                     if (selectedRobot == null){Toast.makeText(getBaseContext(), "Please select a robot first!", Toast.LENGTH_SHORT).show();}
                     else{
                     Intent intent = new Intent(getApplicationContext(), PlayAnimationActivity.class);
+                    intent.putExtras(bundle);
                     startActivity(intent);}
                 }
                 else {
                     Intent intent = new Intent(getApplicationContext(), PlayManuallyActivity.class);
+                    intent.putExtras(bundle);
                     startActivity(intent);
                 }
             }
