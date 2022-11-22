@@ -22,7 +22,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_manually);
         final MazePanel panel = (MazePanel) findViewById(R.id.ManualMazePanel);
-
+        panel.setManorAni(true);
         pathlegnth = 0;
 
 
@@ -132,8 +132,12 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
     private void startWinningActivity(View.OnClickListener view){
         Intent intent = new Intent(this, WinningActivity.class);
+        int energyConsumed = -1;
+        int distance2Exit = 100;
         Bundle bundle = getIntent().getExtras();
-        bundle.putInt("Path Length", pathlegnth);
+        bundle.putInt("Path length", pathlegnth);
+        bundle.putInt("Energy consumed", energyConsumed);
+        bundle.putInt("Distance to exit", distance2Exit);
         intent.putExtras(bundle);
         startActivity(intent);
     }

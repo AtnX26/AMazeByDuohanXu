@@ -15,6 +15,7 @@ public class MazePanel extends View {
     private Paint paint;
     private Canvas canvas;
     private int color;
+    private boolean ManorAni;
 
     public MazePanel(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -33,18 +34,22 @@ public class MazePanel extends View {
         setColor(Color.GRAY);
         DrawRectangle(0, 500, 1000, 500);
 
-        setColor(Color.GREEN);
-        int[] x = new int[]{0, 300, 300,0};
-        int[] y = new int[]{0, 200, 800,1000};
-        DrawPolygon(x, y, 4);
+        if (ManorAni == false) {
+            setColor(Color.GREEN);
+            int[] x = new int[]{0, 300, 300, 0};
+            int[] y = new int[]{0, 200, 800, 1000};
+            DrawPolygon(x, y, 4);
 
-        setColor(Color.YELLOW);
-        int[] x2 = new int[]{700, 1000, 1000, 700};
-        int[] y2 = new int[]{200, 0, 1000, 800};
-        DrawPolygon(x2, y2, 4);
+            setColor(Color.YELLOW);
+            int[] x2 = new int[]{700, 1000, 1000, 700};
+            int[] y2 = new int[]{200, 0, 1000, 800};
+            DrawPolygon(x2, y2, 4);
+        }
 
-        setColor(Color.RED);
-        DrawOval(300, 300, 400, 400);
+        if (ManorAni == true) {
+            setColor(Color.RED);
+            DrawOval(300, 300, 400, 400);
+        }
     }
 
     public void setColor(int rgb) {
@@ -87,5 +92,9 @@ public class MazePanel extends View {
             canvas.drawPath(path, paint);
         }
 
+    }
+
+    public void setManorAni(boolean set){
+        ManorAni = set;
     }
 }
