@@ -17,23 +17,33 @@ import java.util.List;
 
 import edu.wm.cs.cs301.DuohanXu.R;
 
+/**
+ *Initial class for the activity: home of the maze app
+ *
+ * @author DuohanXu
+ */
+
 public class AMazeActivity extends AppCompatActivity {
     private Intent intent;
-
     private int skilllevel;
     private int seed = 1;
     private String tag = "AMazeActivity";
     private Spinner spinner;
     private Spinner roomSpinner;
 
-
+    /**
+     * Creates the activity by assigning view elements their jobs
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_amaze);
         Log.v(tag,"created");
 
-        //Control for the seekbar to adjust complexity
+        /**
+         * Control for the seekbar to adjust complexity
+         */
         SeekBar seekbar = findViewById(R.id.complexity);
         seekbar.setMax(9);
         seekbar.setProgress(0);
@@ -56,9 +66,16 @@ public class AMazeActivity extends AppCompatActivity {
 
             }
         });
+
+        /**
+         * Use two private methods below to set up two spinners
+         */
         spinner = setSpinner();
         roomSpinner = setRoomSpinner();
 
+        /**
+         * Set up revisitButton, creating event when clicked
+         */
         Button revisitButton = (Button) findViewById(R.id.Revisit);
         revisitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +83,7 @@ public class AMazeActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), GeneratingActivity.class);
                 Bundle bundle = new Bundle();
                 Log.v(tag, "Revisit button pressed, proceed to the next activity");
-                /*
+                /**
                 Put information from the last game into the bundle and pass it to the next activity
                  */
                 //A default seed is used here; should get the seed from the container in P7
@@ -79,22 +96,26 @@ public class AMazeActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Set up exploreButton, creating event when clicked
+         */
         Button exploreButton = (Button) findViewById(R.id.Explore);
         exploreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), GeneratingActivity.class);
-                /*
+                /**
                 Record information from this user interface
                  */
                 Log.v(tag, "Explore button pressed, proceed to the next activity");
                 Bundle bundle = new Bundle();
-                /*
-                Put information from the last game into the bundle and pass it to the next activity
+                /**
+                 * Make everything new to the bundle, will use a random method to set up the
+                 * seed in P7
                  */
-                //Give it a new seed
+                //Now just give it a new seed
                 int newSeed = 3;
-                bundle.putInt("Seed", seed);
+                bundle.putInt("Seed", newSeed);
                 bundle.putInt("Complexity",seekbar.getProgress());
                 bundle.putString("Algorithm",spinner.getSelectedItem().toString());
                 bundle.putString("Room", roomSpinner.getSelectedItem().toString());
@@ -104,12 +125,20 @@ public class AMazeActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * The private method for algorithm spinner
+     * @return Spinner
+     */
     private Spinner setSpinner(){
         List<String> mazeAlgorithms = new ArrayList<String>();
         mazeAlgorithms.add("DFS");
         mazeAlgorithms.add("Prim");
         mazeAlgorithms.add("Boruvka");
 
+        /**
+         * Use an ArrayAdapter object to assign the spinner options
+         * Read the selection once the player makes an input
+         */
         Spinner spinner = (Spinner) findViewById(R.id.builderSpinner);
         ArrayAdapter<String> mazeSelectAdapter = new ArrayAdapter <String>(this, android.R.layout.simple_spinner_item, mazeAlgorithms);
         spinner.setAdapter(mazeSelectAdapter);
@@ -130,11 +159,19 @@ public class AMazeActivity extends AppCompatActivity {
         return spinner;
     }
 
+    /**
+     * The private method for room spinner
+     * @return Spinner
+     */
     private Spinner setRoomSpinner(){
         List<String> roomsNoRooms = new ArrayList<String>();
         roomsNoRooms.add("Yes");
         roomsNoRooms.add("No");
 
+        /**
+         * Use an ArrayAdapter object to assign the spinner options
+         * Read the selection once the player makes an input
+         */
         Spinner roomSpinner = (Spinner) findViewById(R.id.roomSpinner);
         ArrayAdapter<String> roomAdapter = new ArrayAdapter <String>(this,
                 android.R.layout.simple_spinner_item, roomsNoRooms);

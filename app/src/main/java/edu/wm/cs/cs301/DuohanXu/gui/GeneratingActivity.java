@@ -42,6 +42,8 @@ public class GeneratingActivity extends AppCompatActivity {
         //Not used now, but will work with Project 7
         Bundle bundle = getIntent().getExtras();
         setContentView(R.layout.activity_generating);
+        Log.v(tag,"created");
+
         RadioGroup radioDriver = (RadioGroup)findViewById(R.id.radioDriver) ;
         RadioGroup radioRobot = (RadioGroup)findViewById(R.id.radioRobot) ;
 

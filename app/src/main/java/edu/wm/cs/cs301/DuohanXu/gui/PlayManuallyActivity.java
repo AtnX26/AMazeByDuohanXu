@@ -21,6 +21,8 @@ public class PlayManuallyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_manually);
+        Log.v(tag,"created");
+
         final MazePanel panel = (MazePanel) findViewById(R.id.ManualMazePanel);
         panel.setManorAni(true);
         pathlegnth = 0;

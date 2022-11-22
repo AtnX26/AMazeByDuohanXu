@@ -24,6 +24,8 @@ public class WinningActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_winning);
+        Log.v(tag,"created");
+
         Bundle bundle = getIntent().getExtras();
         pathlegnth = bundle.getInt("Path length");
         energyconsumed = bundle.getInt("Energy consumed");

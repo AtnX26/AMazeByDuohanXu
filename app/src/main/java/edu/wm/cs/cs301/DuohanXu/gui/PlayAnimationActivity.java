@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.ToggleButton;
 
@@ -25,6 +26,8 @@ public class PlayAnimationActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_animation);
+        Log.v(tag,"created");
+
         final MazePanel panel = (MazePanel) findViewById(R.id.AnimationMazePanel);
         panel.setManorAni(false);
         pathlegnth = 0;
@@ -118,6 +121,10 @@ public class PlayAnimationActivity extends AppCompatActivity {
                 startLosingActivity(this);
             }
         });
+
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.robotEnergy);
+        progressBar.setMax(100);
+        progressBar.setProgress(0);
 
     }
     private void startWinningActivity(View.OnClickListener view){

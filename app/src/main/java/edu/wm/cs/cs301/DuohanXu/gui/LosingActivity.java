@@ -27,6 +27,8 @@ public class LosingActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_losing);
+        Log.v(tag,"created");
+
         Bundle bundle = getIntent().getExtras();
         pathlegnth = bundle.getInt("Path length");
         energyconsumed = bundle.getInt("Energy consumed");
