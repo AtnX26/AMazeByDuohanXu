@@ -286,9 +286,11 @@ public class MazePanel extends View implements P7PanelF22{
      */
     @Override
     public void onDraw(Canvas canvas) {
-        p6Test(canvas);
+        //p6Test(canvas);
         super.onDraw(canvas);
-        canvas.drawBitmap(bitmap,0,0, null);
+        canvas.drawColor(Color.WHITE);
+        Bitmap thisBitmap = Bitmap.createScaledBitmap(bitmap, 1050,1050,true);
+        canvas.drawBitmap(thisBitmap,0,0, paint);
     }
 
     /**
