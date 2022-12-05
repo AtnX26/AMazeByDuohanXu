@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import gui.Constants;
+import edu.wm.cs.cs301.DuohanXu.gui.Constants;
 
 /**
  * This class has the responsibility to obtain the tree of BSP nodes for a given maze.

@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import gui.MazeFileWriter;
+import edu.wm.cs.cs301.DuohanXu.gui.MazeFileWriter;
 
 /**
  * A leaf node for a tree of BSPNodes. It carries a list of walls. 

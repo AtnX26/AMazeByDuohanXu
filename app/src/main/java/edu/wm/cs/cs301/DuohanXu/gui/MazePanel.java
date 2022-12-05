@@ -21,6 +21,7 @@ public class MazePanel extends View implements P7PanelF22{
     private Canvas canvas;
     private int color;
     private boolean ManorAni;
+    private boolean topRect;
 
     /**
      * Initiates the paint, bitmap and canvas for drawing
@@ -35,6 +36,20 @@ public class MazePanel extends View implements P7PanelF22{
 
     }
 
+
+    /**
+     * Start drawing process
+     * @param canvas
+     */
+    @Override
+    public void onDraw(Canvas canvas) {
+        //p6Test(canvas);
+        super.onDraw(canvas);
+        canvas.drawColor(Color.WHITE);
+        Bitmap thisBitmap = Bitmap.createScaledBitmap(bitmap, 1050,1050,true);
+        canvas.drawBitmap(thisBitmap,0,0, paint);
+    }
+
     /**
      * The private method for drawing required images for P6
      * @param c
@@ -43,27 +58,27 @@ public class MazePanel extends View implements P7PanelF22{
 
 
         setColor(Color.BLACK);
-        DrawRectangle(0, 0, 1000, 500);
+        addFilledRectangle(0, 0, 1000, 500);
 
         setColor(Color.GRAY);
-        DrawRectangle(0, 500, 1000, 500);
+        addFilledRectangle(0, 500, 1000, 500);
         //If false (PlayAnimationActivity), show two polygons
         if (ManorAni == false) {
             setColor(Color.GREEN);
             int[] x = new int[]{0, 300, 300, 0};
             int[] y = new int[]{0, 200, 800, 1000};
-            DrawPolygon(x, y, 4);
+            addFilledPolygon(x, y, 4);
 
             setColor(Color.YELLOW);
             int[] x2 = new int[]{700, 1000, 1000, 700};
             int[] y2 = new int[]{200, 0, 1000, 800};
-            DrawPolygon(x2, y2, 4);
+            addFilledPolygon(x2, y2, 4);
         }
 
         //If true (PlayManuallyActivity), show a red ball
         if (ManorAni == true) {
             setColor(Color.RED);
-            DrawOval(300, 300, 400, 400);
+            addFilledOval(300, 300, 400, 400);
         }
     }
 
@@ -73,7 +88,7 @@ public class MazePanel extends View implements P7PanelF22{
      */
     @Override
     public void commit() {
-
+        invalidate();
     }
 
     /**
@@ -86,6 +101,9 @@ public class MazePanel extends View implements P7PanelF22{
      */
     @Override
     public boolean isOperational() {
+        if(canvas != null) {
+            return true;
+        }
         return false;
     }
 
@@ -105,7 +123,7 @@ public class MazePanel extends View implements P7PanelF22{
      */
     @Override
     public int getColor() {
-        return 0;
+        return color;
     }
 
     /**
@@ -137,7 +155,10 @@ public class MazePanel extends View implements P7PanelF22{
      */
     @Override
     public void addFilledRectangle(int x, int y, int width, int height) {
-
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        float right = x + width;
+        float bottom = y + height;
+        canvas.drawRect((float) x, (float) y, right, bottom, paint);
     }
 
     /**
@@ -157,6 +178,17 @@ public class MazePanel extends View implements P7PanelF22{
      */
     @Override
     public void addFilledPolygon(int[] xPoints, int[] yPoints, int nPoints) {
+        paint.setStyle(Paint.Style.STROKE);
+        Path path = new Path();
+        path.reset();
+        if(xPoints != null & yPoints != null){
+            path.moveTo(xPoints[0], yPoints[0]);
+            for(int i = 1; i < nPoints; i++){
+                path.lineTo((float)xPoints[i], (float)yPoints[i]);
+            }
+            path.close();
+            canvas.drawPath(path, paint);
+        }
 
     }
 
@@ -178,7 +210,17 @@ public class MazePanel extends View implements P7PanelF22{
      */
     @Override
     public void addPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-
+        paint.setStyle(Paint.Style.STROKE);
+        Path path = new Path();
+        path.reset();
+        if(xPoints != null & yPoints != null){
+            path.moveTo(xPoints[0], yPoints[0]);
+            for(int i = 1; i < nPoints; i++){
+                path.lineTo((float)xPoints[i], (float)yPoints[i]);
+            }
+            path.close();
+            canvas.drawPath(path, paint);
+        }
     }
 
     /**
@@ -194,7 +236,9 @@ public class MazePanel extends View implements P7PanelF22{
      */
     @Override
     public void addLine(int startX, int startY, int endX, int endY) {
-
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(5);
+        canvas.drawLine((float)startX, (float)startY, (float)endX, (float)endY,paint);
     }
 
     /**
@@ -212,7 +256,10 @@ public class MazePanel extends View implements P7PanelF22{
      */
     @Override
     public void addFilledOval(int x, int y, int width, int height) {
-
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+        float right = width + x;
+        float bottom = height + y;
+        canvas.drawOval((float) x, (float) y, right, bottom, paint);
     }
 
     /**
@@ -243,7 +290,10 @@ public class MazePanel extends View implements P7PanelF22{
      */
     @Override
     public void addArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-
+        paint.setStyle(Paint.Style.STROKE);
+        float right = x + width;
+        float bottom = y + height;
+        canvas.drawArc((float)x, (float) y, right, bottom, (float)startAngle, (float)arcAngle, false, paint);
     }
 
     /**
@@ -256,7 +306,7 @@ public class MazePanel extends View implements P7PanelF22{
      */
     @Override
     public void addMarker(float x, float y, String str) {
-
+        canvas.drawText(str, x, y, paint);
     }
 
     /**
@@ -280,18 +330,7 @@ public class MazePanel extends View implements P7PanelF22{
 
     }
 
-    /**
-     * Start drawing process
-     * @param canvas
-     */
-    @Override
-    public void onDraw(Canvas canvas) {
-        //p6Test(canvas);
-        super.onDraw(canvas);
-        canvas.drawColor(Color.WHITE);
-        Bitmap thisBitmap = Bitmap.createScaledBitmap(bitmap, 1050,1050,true);
-        canvas.drawBitmap(thisBitmap,0,0, paint);
-    }
+
 
     /**
      * Helper method to draw an oval (or a circle if x=y)
@@ -300,7 +339,7 @@ public class MazePanel extends View implements P7PanelF22{
      * @param width
      * @param height
      */
-    public void DrawOval(int x, int y, int width, int height) {
+    /** public void DrawOval(int x, int y, int width, int height) {
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         float right = width + x;
         float bottom = height + y;
@@ -315,7 +354,7 @@ public class MazePanel extends View implements P7PanelF22{
      * @param width
      * @param height
      */
-    public void DrawRectangle(int x, int y, int width, int height) {
+    /**public void DrawRectangle(int x, int y, int width, int height) {
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         float right = x + width;
         float bottom = y + height;
@@ -328,7 +367,7 @@ public class MazePanel extends View implements P7PanelF22{
      * @param yPoints
      * @param nPoints
      */
-    public void DrawPolygon(int[] xPoints, int[] yPoints, int nPoints) {
+    /** public void DrawPolygon(int[] xPoints, int[] yPoints, int nPoints) {
         paint.setStyle(Paint.Style.FILL_AND_STROKE);
         Path path = new Path();
         path.reset();

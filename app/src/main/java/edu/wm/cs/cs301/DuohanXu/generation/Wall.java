@@ -6,8 +6,8 @@ import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import gui.ColorTheme;
-import gui.MazeFileWriter;
+import edu.wm.cs.cs301.DuohanXu.gui.ColorTheme;
+import edu.wm.cs.cs301.DuohanXu.gui.MazeFileWriter;
 
 /**
  * A wall is a continuous sequence of wallboards in the maze.

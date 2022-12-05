@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import gui.Constants;
+import edu.wm.cs.cs301.DuohanXu.gui.Constants;
 
 /**
  * This class creates a list of walls for a floorplan.
