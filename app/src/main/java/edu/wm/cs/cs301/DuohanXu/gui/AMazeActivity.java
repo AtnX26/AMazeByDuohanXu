@@ -30,6 +30,8 @@ public class AMazeActivity extends AppCompatActivity {
     private String tag = "AMazeActivity";
     private Spinner spinner;
     private Spinner roomSpinner;
+    private boolean Room;
+    private String Algorithm;
 
     /**
      * Creates the activity by assigning view elements their jobs
@@ -88,9 +90,9 @@ public class AMazeActivity extends AppCompatActivity {
                  */
                 //A default seed is used here; should get the seed from the container in P7
                 bundle.putInt("Seed", seed);
-                bundle.putInt("Complexity",seekbar.getProgress());
-                bundle.putString("Algorithm",spinner.getSelectedItem().toString());
-                bundle.putString("Room", roomSpinner.getSelectedItem().toString());
+                bundle.putInt("Complexity",RevisitData.getSkillLevel());
+                bundle.putString("Algorithm",RevisitData.getAlgorithm());
+                bundle.putBoolean("Room", RevisitData.getRoom());
                 bundle.putBoolean("Revisit", true);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -114,6 +116,13 @@ public class AMazeActivity extends AppCompatActivity {
                  * Make everything new to the bundle, will use a random method to set up the
                  * seed in P7
                  */
+                if(roomSpinner.getSelectedItem().toString().equals("Yes")){
+                    Room = true;
+                } else{
+                    Room = false;
+                }
+                Algorithm = spinner.getSelectedItem().toString();
+                DataContainer.setMazeAlgorithm(Algorithm);
                 //Now just give it a new seed
                 int newSeed = 3;
                 bundle.putInt("Seed", newSeed);
@@ -183,6 +192,7 @@ public class AMazeActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.v(tag, "Selected " + roomSpinner.getSelectedItem().toString());
+
             }
 
             @Override

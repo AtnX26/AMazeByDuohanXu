@@ -18,15 +18,17 @@ import android.widget.Toast;
 
 import edu.wm.cs.cs301.DuohanXu.generation.Maze;
 import edu.wm.cs.cs301.DuohanXu.generation.MazeFactory;
+import edu.wm.cs.cs301.DuohanXu.generation.Order;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import edu.wm.cs.cs301.DuohanXu.R;
-import edu.wm.cs.cs301.DuohanXu.generation.Order;
+
 
 /**
  *Second class for the activity: loading page of the maze app
@@ -43,13 +45,16 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
     private int percentdone;
     private int seed = 0;
     private int skillLevel;
+    private boolean deterministic = false;
     private boolean rooms;
+    private boolean revisit;
     private String selectedDriver=null;
     private String selectedRobot;
     private String tag = "GeneratingActivity";
     protected MazeFactory factory;
     private Order.Builder builder;
     private Maze maze;
+    private RevisitData Revisit;
     /**
      * Creates the activity by assigning view elements their jobs
      * @param savedInstanceState
@@ -57,13 +62,16 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //Not used now, but will work with Project 7
         Bundle bundle = getIntent().getExtras();
-        setContentView(R.layout.activity_generating);
+
         Log.v(tag,"created");
+
+        factory= new MazeFactory();
+        revisit = bundle.getBoolean("Revisit");
         readBundle(bundle);
         factory.order(this);
 
+        setContentView(R.layout.activity_generating);
         /**
          * Set up a bunch of RadioGroup and RadioButton objects
          */
@@ -268,8 +276,10 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
         }
         skillLevel = bundle.getInt("Complexity");
         String ifRooms = bundle.getString("Rooms");
-        if (ifRooms == "Yes"){rooms = true}
-        else {rooms = false}
+
+        if (ifRooms == "Yes"){rooms = true;}
+        else {rooms = false;}
+
         if(!deterministic&& revisit==false){
             Random rand = new Random();
             seed = rand.nextInt();
