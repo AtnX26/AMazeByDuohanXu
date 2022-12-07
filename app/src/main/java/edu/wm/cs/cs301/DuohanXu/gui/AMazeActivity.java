@@ -91,6 +91,7 @@ public class AMazeActivity extends AppCompatActivity {
                 bundle.putInt("Complexity",seekbar.getProgress());
                 bundle.putString("Algorithm",spinner.getSelectedItem().toString());
                 bundle.putString("Room", roomSpinner.getSelectedItem().toString());
+                bundle.putBoolean("Revisit", true);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -119,6 +120,7 @@ public class AMazeActivity extends AppCompatActivity {
                 bundle.putInt("Complexity",seekbar.getProgress());
                 bundle.putString("Algorithm",spinner.getSelectedItem().toString());
                 bundle.putString("Room", roomSpinner.getSelectedItem().toString());
+                bundle.putBoolean("Revisit", false);
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

@@ -16,6 +16,9 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import edu.wm.cs.cs301.DuohanXu.generation.Maze;
+import edu.wm.cs.cs301.DuohanXu.generation.MazeFactory;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -23,23 +26,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.wm.cs.cs301.DuohanXu.R;
+import edu.wm.cs.cs301.DuohanXu.generation.Order;
 
 /**
  *Second class for the activity: loading page of the maze app
  *
  * @author DuohanXu
  */
-public class GeneratingActivity extends AppCompatActivity {
+public class GeneratingActivity extends AppCompatActivity implements Order {
 
     private Handler handler;
     private View view;
     private static int progress;
     private ProgressBar progressBar;
     private int progressStatus = 0;
+    private int percentdone;
+    private int seed = 0;
+    private int skillLevel;
+    private boolean rooms;
     private String selectedDriver=null;
     private String selectedRobot;
     private String tag = "GeneratingActivity";
-
+    protected MazeFactory factory;
+    private Order.Builder builder;
+    private Maze maze;
     /**
      * Creates the activity by assigning view elements their jobs
      * @param savedInstanceState
@@ -51,6 +61,8 @@ public class GeneratingActivity extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         setContentView(R.layout.activity_generating);
         Log.v(tag,"created");
+        readBundle(bundle);
+        factory.order(this);
 
         /**
          * Set up a bunch of RadioGroup and RadioButton objects
@@ -66,6 +78,7 @@ public class GeneratingActivity extends AppCompatActivity {
         RadioButton rSoso = (RadioButton)findViewById(R.id.radioSoso);
         RadioButton rShaky = (RadioButton)findViewById(R.id.radioShaky);
         TextView text = (TextView) findViewById(R.id.textView16);
+        progressBar = (ProgressBar) findViewById(R.id.generatingProgress);
 
         /**
          * Set up a button to confirm selection.
@@ -143,13 +156,20 @@ public class GeneratingActivity extends AppCompatActivity {
          * In P6, implement a thread that imitates the generating process instead.
          */
         progress = 0;
-        progressBar = (ProgressBar) findViewById(R.id.generatingProgress);
+
         progressBar.setMax(100);
-        handler = new Handler(Looper.getMainLooper());
+        handler = new Handler(Looper.getMainLooper()){
+            @Override
+            public void handleMessage(Message msg){
+                Bundle bundle = msg.getData();
+                int progressBarMessage = bundle.getInt("progress");
+                Log.v(tag, "Loading bar: " + progressBar.toString());
+            }
+        };
         /**
          * The thread that updates the progress bar every 50 ms.
-         * Stops when the progress reaches 100.
-         */
+         * Stops when the progress reaches 100. (Test thread)
+         *
         new Thread(new Runnable() {
             public void run() {
                 while (progressStatus < 100) {
@@ -160,7 +180,7 @@ public class GeneratingActivity extends AppCompatActivity {
                 /**
                  * If the maze is generated before the player makes a selection of the driver:
                  * Show a message as text above the start button.
-                 */
+                 *
                 if (selectedDriver == null){
 
                     handler.post(() -> text.setText("Maze generated, don't forget to pick a driver!"));
@@ -176,7 +196,7 @@ public class GeneratingActivity extends AppCompatActivity {
                 }
                 return ++progress;
             }
-        }).start();
+        }).start();/
 
         /**
          * Set up the button to start playing the maze.
@@ -230,16 +250,127 @@ public class GeneratingActivity extends AppCompatActivity {
     }
 
     /**
+     *
+     */
+    private void readBundle(Bundle bundle){
+        factory = new MazeFactory();
+        switch(bundle.getString("Algorithm")){
+            case "DFS":
+                builder = Builder.DFS;
+                break;
+            case "Prim":
+                builder = Builder.Prim;
+                break;
+            case "Boruvka":
+                builder = Builder.Boruvka;
+                break;
+
+        }
+        skillLevel = bundle.getInt("Complexity");
+        String ifRooms = bundle.getString("Rooms");
+        if (ifRooms == "Yes"){rooms = true}
+        else {rooms = false}
+        if(!deterministic&& revisit==false){
+            Random rand = new Random();
+            seed = rand.nextInt();
+        }
+        Revisit.setRevisit(skillLevel,bundle.getString("Maze Generator"),rooms,seed);
+        if(revisit == true){
+            seed = Revisit.getSeed();
+        }
+    }
+    /**
      * Go back to the title
      */
     @Override
     public void onBackPressed(){
         Log.v(tag, "back button pressed in Generating Activity");
+        factory.cancel();
         super.onBackPressed();
     }
 
 
+    /**
+     * Gives the required skill level, range of values 0,1,2,...,15.
+     *
+     * @return the skill level or size of maze to be generated in response to an order
+     */
+    @Override
+    public int getSkillLevel() {
+        return skillLevel;
     }
+
+    /**
+     * Gives the requested builder algorithm, possible values
+     * are listed in the Builder enum type.
+     *
+     * @return the builder algorithm that is expected to be used for building the maze
+     */
+    @Override
+    public Builder getBuilder() {
+        return builder;
+    }
+
+    /**
+     * Describes if the ordered maze should be perfect, i.e. there are
+     * no loops and no isolated areas, which also implies that
+     * there are no rooms as rooms can imply loops
+     *
+     * @return true if a perfect maze is wanted, false otherwise
+     */
+    @Override
+    public boolean isPerfect() {
+        return !rooms;
+    }
+
+    /**
+     * Gives the seed that is used for the random number generator
+     * used during the maze generation.
+     *
+     * @return the current setting for the seed value of the random number generator
+     */
+    @Override
+    public int getSeed() {
+        return seed;
+    }
+
+    /**
+     * Delivers the produced maze.
+     * This method is called by the factory to provide the
+     * resulting maze as a MazeConfiguration.
+     * It is a call back function that is called some time
+     * later in response to a client's call of the order method.
+     *
+     * @param mazeConfig is the maze that is delivered in response to an order
+     */
+    @Override
+    public void deliver(Maze mazeConfig) {
+        this.maze = mazeConfig;
+    }
+
+    /**
+     * Provides an update on the progress being made on
+     * the maze production. This method is called occasionally
+     * during production, there is no guarantee on particular values.
+     * Percentage will be delivered in monotonously increasing order,
+     * the last call is with a value of 100 after delivery of product.
+     *
+     * @param percentage of job completion
+     */
+    @Override
+    public void updateProgress(int percentage) {
+        Log.v(tag, "Updating progress loaded to " + percentage);
+        if (this.percentdone < percentage && percentage <= 100) {
+            this.percentdone = percentage;
+            progressBar.setProgress(percentdone);
+        }
+        Message message = new Message();
+        Bundle bundle = new Bundle();
+        bundle.putInt("progress", this.percentdone);
+        message.setData(bundle);
+        handler.sendMessage(message);
+    }
+}
 
 
 
