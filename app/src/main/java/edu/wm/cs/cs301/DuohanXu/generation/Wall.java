@@ -6,8 +6,10 @@ import java.util.logging.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import edu.wm.cs.cs301.DuohanXu.gui.ColorTheme;
+//import edu.wm.cs.cs301.DuohanXu.gui.ColorTheme;
 import edu.wm.cs.cs301.DuohanXu.gui.MazeFileWriter;
+import edu.wm.cs.cs301.DuohanXu.gui.MazePanel;
+
 
 /**
  * A wall is a continuous sequence of wallboards in the maze.
@@ -82,6 +84,10 @@ public class Wall {
     private boolean seen;
 
     /**
+     * panel used for drawing.
+     */
+    private MazePanel panel;
+    /**
      * Constructor assigns parameter values to instance variables.
      *
      * @param startX
@@ -122,8 +128,31 @@ public class Wall {
         partition = false;
         seen = false;
         // determine color
-        setColor(ColorTheme.getWallColor(distance, cc, getExtensionX()));
+        //setColor(ColorTheme.getWallColor(distance, cc, getExtensionX()));
+        initColor(distance,cc);
         // all fields initialized
+    }
+
+    private void initColor(final int distance, final int cc) {
+        // mod used to limit the number of colors to 6
+        final int rgbValue = MazePanel.getWallColor(distance, cc, getExtensionX());
+        setColor(rgbValue);
+    }
+
+    /**
+     * Computes an RGB value based on the given numerical value.
+     *
+     * @param distance
+     *            value to select color
+     * @return the calculated RGB value
+     */
+    private int calculateRGBValue(final int distance) {
+        // compute rgb value, depends on distance and x direction
+        // 7 in binary is 0...0111
+        // use AND to get last 3 digits of distance
+        final int part1 = distance & 7;
+        final int add = (getExtensionX() != 0) ? 1 : 0;
+        return ((part1 + 2 + add) * 70) / 8 + 80;
     }
 
     /**
@@ -155,6 +184,12 @@ public class Wall {
         }
         return (getExtensionY() < 0) ? 2 : -2;
     }
+
+    /**
+     * Default minimum value for RGB values.
+     */
+    private static final int RGB_DEF = 20;
+    private static final int RGB_DEF_GREEN = 60;
 
     /**
      * Tells if the given wall has essentially same direction but for its

@@ -1,5 +1,7 @@
 package edu.wm.cs.cs301.DuohanXu.gui;
 
+import static android.graphics.Color.rgb;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -8,6 +10,10 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.core.content.ContextCompat;
+
+import edu.wm.cs.cs301.DuohanXu.R;
 
 /**
  *Additional class for the activity: drawing the maze
@@ -21,7 +27,16 @@ public class MazePanel extends View implements P7PanelF22{
     private Canvas canvas;
     private int color;
     private boolean ManorAni;
-    private boolean topRect;
+    private boolean top;
+    private static final int RGB_DEF = 20;
+    private static final int RGB_DEF_GREEN = 60;
+    private static final int greenWM = Color.parseColor("#115740");
+    protected static final int lightPink = Color.parseColor("#FBE2E2");
+    protected static final int Pink = Color.parseColor("#F6508B");
+    private static final int Black = Color.parseColor("#FF000000");
+    private static final int goldWM = Color.parseColor("#916f41");
+    private static final int yellowWM = Color.parseColor("#FFFF99");
+    private String markerFont;
 
     /**
      * Initiates the paint, bitmap and canvas for drawing
@@ -138,7 +153,10 @@ public class MazePanel extends View implements P7PanelF22{
      */
     @Override
     public void addBackground(float percentToExit) {
-
+        paint.setColor(getBackgroundColor(percentToExit, top));
+        if(!top){
+            paint.setColor(ContextCompat.getColor(getContext(), R.color.pink));
+        }
     }
 
     /**
@@ -389,4 +407,76 @@ public class MazePanel extends View implements P7PanelF22{
     public void setManorAni(boolean set){
         ManorAni = set;
     }
+
+    public static int getWallColor(final int d, final int cc, int extensionX) {
+        // compute rgb value, depends on distance and x direction
+        final int distance = d / 4;
+        // mod used to limit the number of colors to 6
+        final int part1 = distance & 7;
+        final int add = (extensionX != 0) ? 1 : 0;
+        final int rgbValue = ((part1 + 2 + add) * 70) / 8 + 80;
+        int wallColor = 0;
+        switch (((d >> 3) ^ cc) % 6) {
+            case 0:
+                wallColor = rgb(rgbValue, RGB_DEF, RGB_DEF);
+                break;
+            case 1:
+                wallColor = rgb(RGB_DEF, RGB_DEF_GREEN, RGB_DEF);
+                break;
+            case 2:
+                wallColor = rgb(RGB_DEF, RGB_DEF, rgbValue);
+                break;
+            case 3:
+                wallColor = rgb(rgbValue, RGB_DEF_GREEN, RGB_DEF);
+                break;
+            case 4:
+                wallColor = rgb(RGB_DEF, RGB_DEF_GREEN, rgbValue);
+                break;
+            case 5:
+                wallColor = rgb(rgbValue, RGB_DEF, rgbValue);
+                break;
+            default:
+                wallColor = rgb(RGB_DEF, RGB_DEF, RGB_DEF);
+                break;
+        }
+        return wallColor;
+    }
+
+    private int blend(Color c0, Color c1, double weight0) {
+        if (weight0 < 0.1)
+            return Color.argb((float) c1.alpha(), c1.red(), c1.green(), c1.blue());
+//            return ((((int) c0.red()) * 65536) + (((int) c0.green()) * 256) + (int) c0.blue());
+        if (weight0 > 0.95)
+            return Color.argb((float) c0.alpha(), c0.red(), c0.green(), c0.blue());
+//            return ((((int) c1.red()) * 65536) + (((int) c1.green()) * 256) + (int) c1.blue());
+        double a = Math.max(c0.alpha(), c1.alpha());
+        double r = weight0 * c0.red() + (1-weight0) * c1.red();
+        double g = weight0 * c0.green() + (1-weight0) * c1.green();
+        double b = weight0 * c0.blue() + (1-weight0) * c1.blue();
+        return Color.argb((float)a, (float)r, (float)g, (float)b);
+    }
+
+    private int getBackgroundColor(float percentToExit, boolean top) {
+        return top? blend(Color.valueOf(lightPink), Color.valueOf(Pink), percentToExit) :
+                blend(Color.valueOf(Color.LTGRAY), Color.valueOf(greenWM), percentToExit);
+
+    }
+    public static int createNewColor(float r, float g, float b, float a) {
+        return Color.valueOf(r, g, b, a).toArgb();
+    }
+    /**
+     * Takes the hex string value of a color
+     * and returns that color's int value
+     *
+     * @param str string of a color
+     * @return int value of the color passed in
+     */
+    public static int decodeColor(String str) {
+        return Color.parseColor(str);
+    }
+    public void setFont(String fontName) {
+        markerFont = fontName;
+        paint.setFontFeatureSettings(fontName);
+    }
+
 }

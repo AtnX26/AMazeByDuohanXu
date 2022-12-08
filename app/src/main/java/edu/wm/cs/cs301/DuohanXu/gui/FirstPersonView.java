@@ -3,8 +3,9 @@
  */
 package edu.wm.cs.cs301.DuohanXu.gui;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+
+import android.graphics.Color;
+
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -45,7 +46,9 @@ public class FirstPersonView {
 	private final int mapUnit;    // = 128;
 	private final int stepSize;   // = map_unit/4;
 	// map scale may be adjusted by user input, controlled in StatePlaying
-	
+	static final int greenWM = MazePanel.decodeColor("#115740");
+	static final int goldWM = MazePanel.decodeColor("#916f41");
+	static final int yellowWM = MazePanel.decodeColor("#FFFF99");
 	/**
 	 * A data structure to store which wallboards have been visible during
 	 * the game. The Map can color highlight such wallboards and the 
@@ -80,7 +83,7 @@ public class FirstPersonView {
 	 * with the current buffer image is the responsibility of
 	 * the StatePlaying class.
 	 */
-	private Graphics2D gc; 
+	private MazePanel panel;
 	
 	/**
 	 * The current position (x,y) scaled by map_unit and 
@@ -159,13 +162,13 @@ public class FirstPersonView {
 	 */
 	public void draw(MazePanel panel, int x, int y, int walkStep, int ang, float percentToExit) {
 		// obtain a Graphics2D object we can draw on
-		Graphics g = panel.getBufferGraphics() ;
+		this.panel = panel;
         // viewers draw on the buffer graphics
-        if (null == g) {
+        if (null == panel) {
             LOGGER.warning("Can't get graphics object to draw on, mitigate this by skipping draw operation") ;
             return;
         }
-        gc = (Graphics2D) g ;
+
         
         // update fields angle, viewx, viewy for current position and viewing angle
         angle = ang ;
@@ -173,9 +176,9 @@ public class FirstPersonView {
         
         // update graphics
         // draw background figure: lightGrey to green on bottom half, yellow to gold on top half
-        drawBackground(g, percentToExit);
+        drawBackground(panel, percentToExit);
         // set color to white and draw what ever can be seen from the current position
-        g.setColor(ColorTheme.getColor(MazeColors.FIRSTPERSON_DEFAULT));
+        panel.setColor(Color.WHITE);
         // reset the set of ranges to a single new element (0,width-1)
         // to cover the full width of the view 
         // as we have not drawn any polygons (walls) yet.
@@ -186,6 +189,7 @@ public class FirstPersonView {
         		drawRectCounter = drawRectLateCounter = drawRectWallCounter = 0;
         //
         drawAllVisibleSectors(bspRoot);
+		panel.commit();
 	}
 
 
@@ -217,14 +221,18 @@ public class FirstPersonView {
 	 * The color setting adjusts to the distance to the exit to 
 	 * provide an additional clue for the user.
 	 * Colors transition from yellow to gold and from light grey to green.
-	 * @param graphics to draw on, must be not null
+	 * @param panel to draw on, must be not null
 	 * @param percentToExit gives the distance to exit
 	 */
-	private void drawBackground(Graphics graphics, float percentToExit) {
-		graphics.setColor(ColorTheme.getColor(MazeColors.BACKGROUND_TOP,percentToExit));
-		graphics.fillRect(0, 0, viewWidth, viewHeight/2);
-		graphics.setColor(ColorTheme.getColor(MazeColors.BACKGROUND_BOTTOM,percentToExit));
-		graphics.fillRect(0, viewHeight/2, viewWidth, viewHeight/2);
+	private void drawBackground(MazePanel panel, float percentToExit) {
+		//graphics.setColor(ColorTheme.getColor(MazeColors.BACKGROUND_TOP,percentToExit));
+		//graphics.fillRect(0, 0, viewWidth, viewHeight/2);
+		//graphics.setColor(ColorTheme.getColor(MazeColors.BACKGROUND_BOTTOM,percentToExit));
+		//graphics.fillRect(0, viewHeight/2, viewWidth, viewHeight/2);
+		panel.addBackground(percentToExit);
+		panel.addFilledRectangle(0, 0, viewWidth, viewHeight/2);
+		panel.addBackground(percentToExit);
+		panel.addFilledRectangle(0, viewHeight/2, viewWidth, viewHeight/2);
 	}
 
 	/**
@@ -439,7 +447,8 @@ public class FirstPersonView {
 		
 		// moved code for drawing bits and pieces into yet another method to 
 		// gain more clarity on what information is actually needed
-		gc.setColor(ColorTheme.getColor(wall.getColor()));
+		//gc.setColor(ColorTheme.getColor(wall.getColor()));
+		panel.setColor(wall.getColor());
 		boolean drawn = drawPolygons(x1, x2, y11, y12, y21, y22);
 		
 		if (drawn && !wall.isSeen()) {
@@ -519,7 +528,7 @@ public class FirstPersonView {
 			// debug
 			//dbg("polygon-x: " + xps[0] + ", " + xps[1] + ", " + xps[2] + ", " + xps[3]) ;
 			//dbg("polygon-y: " + yps[0] + ", " + yps[1] + ", " + yps[2] + ", " + yps[3]) ;
-			gc.fillPolygon(xps, yps, 4);
+			panel.addFilledPolygon(xps, yps, 4);
 			// for debugging purposes, code will draw a red line around polygon
 			// this makes individual walls visible
 			/*

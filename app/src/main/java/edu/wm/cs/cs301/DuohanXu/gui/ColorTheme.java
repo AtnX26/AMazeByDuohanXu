@@ -1,6 +1,8 @@
 package edu.wm.cs.cs301.DuohanXu.gui;
 
-import java.awt.Color;
+//import java.awt.Color;
+import android.graphics.Color;
+import static android.graphics.Color.rgb;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,19 +15,20 @@ import java.util.logging.Logger;
  * 
  * @author Peter Kemper
  *
- */
-public class ColorTheme {
+ *
+
+   public class ColorTheme {
 	/*
 	 * Several themes are supported with the help of an internal Singleton
 	 * that varies based on the instantiation of a different internal class.
-	 */
+	 *
 	
 	
 	// General color settings across multiple screens
-	private static final Color greenWM = Color.decode("#115740");
-	private static final Color goldWM = Color.decode("#916f41");
-	private static final Color blackWM = Color.decode("#222222");
-	private static final Color yellowWM = Color.decode("#FFFF99");
+	private static final int greenWM = Color.parseColor("#115740");
+	private static final int goldWM = Color.parseColor("#916f41");
+	private static final int blackWM = Color.parseColor("#222222");
+	private static final int yellowWM = Color.parseColor("#FFFF99");
 
 	//specifically for CompassRose.java, corresponding enum values have prefix COMPASSROSE_
 	// fixed configuration for arms
@@ -44,7 +47,7 @@ public class ColorTheme {
     /** 
      * MazeColors enumerates color choices for specific purposes.
      * The prefix indicates which class or feature uses it. 
-     */
+     *
 	public enum MazeColors {BACKGROUND_TOP, BACKGROUND_BOTTOM, 
 		MAP_DEFAULT, MAP_WALL_DEFAULT, MAP_WALL_SEENBEFORE, MAP_CURRENTLOCATION, MAP_SOLUTION, 
 		COMPASSROSE_MAIN_COLOR, COMPASSROSE_CIRCLE_HIGHLIGHT, COMPASSROSE_CIRCLE_SHADE, 
@@ -119,7 +122,7 @@ public class ColorTheme {
 	 * Alpha is defaulted to 255.
 	 * @param rgb the rgb value
 	 * @return the matching instance of a color
-	 */
+	 *
 	public static Color getColor(int rgb) {
 		return new Color(rgb);
 	}
@@ -130,7 +133,7 @@ public class ColorTheme {
 	 * 
 	 * @author Peter Kemper
 	 *
-	 */
+	 *
 	private static class ColorSettings {
 		Color getColor(MazeColors color, float percentToExit) {
 			Color result = (MazeColors.BACKGROUND_TOP == color)? Color.BLACK : Color.DARK_GRAY;
@@ -148,7 +151,7 @@ public class ColorTheme {
 	     * @param distance
 	     *            value to select color
 	     * @return the calculated RGB value
-	     */
+	     *
 	    static int calculateRGBValue(final int distance, final int extensionX) {
 	        // compute rgb value, depends on distance and x direction
 	        // 7 in binary is 0...0111
@@ -159,7 +162,7 @@ public class ColorTheme {
 	    }
 	    /**
 	     * Default minimum value for RGB values.
-	     */
+	     *
 	    static final int RGB_DEF = 20;
 	   
 	}
@@ -176,7 +179,7 @@ public class ColorTheme {
 	 * 
 	 * @author Peter Kemper
 	 *
-	 */
+	 *
 	private static class ColorSettingsBasic extends ColorSettings {
 	     /**
 	     * Determine and set the color for this segment.
@@ -185,7 +188,7 @@ public class ColorTheme {
 	     *            to exit
 	     * @param cc
 	     *            obscure
-	     */
+	     *
 	    @Override
 	    Color getWallColor(final int distance, final int cc, final int extensionX) {
 	    	Color result; 
@@ -240,7 +243,7 @@ public class ColorTheme {
 	 * 
 	 * @author Peter Kemper
 	 *
-	 */
+	 *
 	private static class ColorSettingsAdvanced extends ColorSettings {
 		/**
 		 * Determine the background color for the top and bottom
@@ -250,7 +253,7 @@ public class ColorTheme {
 		 * @param percentToExit describes how far it is to the exit as a percentage value
 		 * @param top is true for the top rectangle, false for the bottom
 		 * @return the color to use for the background rectangle
-		 */
+		 *
 		@Override
 		Color getColor(MazeColors color, float percentToExit) {
 			Color result = (MazeColors.BACKGROUND_TOP == color)? 
@@ -270,22 +273,22 @@ public class ColorTheme {
 		 * @param sndColor is the second color
 		 * @param weightFstColor is the weight of fstColor, {@code 0.0 <= weightFstColor <= 1.0}
 		 * @return blend of both colors as weighted average of their rgb values
-		 */
-		private Color blend(Color fstColor, Color sndColor, double weightFstColor) {
+		 *
+		private int blend(int fstColor, int sndColor, double weightFstColor) {
 			if (weightFstColor < 0.1)
 				return sndColor;
 			if (weightFstColor > 0.95)
 				return fstColor;
-		    double r = weightFstColor * fstColor.getRed() + (1-weightFstColor) * sndColor.getRed();
+		    double r = weightFstColor * fstColor.red() + (1-weightFstColor) * sndColor.getRed();
 		    double g = weightFstColor * fstColor.getGreen() + (1-weightFstColor) * sndColor.getGreen();
 		    double b = weightFstColor * fstColor.getBlue() + (1-weightFstColor) * sndColor.getBlue();
 		    double a = Math.max(fstColor.getAlpha(), sndColor.getAlpha());
 
-		    return new Color((int) r, (int) g, (int) b, (int) a);
+		    return Color.argb((int) r, (int) g, (int) b, (int) a);
 		  }
 		/**
 	     * Default minimum value for RGB values.
-	     */
+	     *
 	    private static final int RGB_DEF_GREEN = 10;
 	    /**
 	     * Determine the color for this wall.
@@ -294,7 +297,7 @@ public class ColorTheme {
 	     *            to exit
 	     * @param cc
 	     *            obscure
-	     */
+	     *
 	    @Override
 	    Color getWallColor(final int distance, final int cc, final int extensionX) {
 	    	Color result;
@@ -332,7 +335,7 @@ public class ColorTheme {
 	
 	/////// set up for Singleton pattern //
 	private static ColorSettings instance;
-	private static ColorThemeSelection theme = ColorThemeSelection.DEFAULT; 
+	private static Selection theme = ColorThemeSelection.DEFAULT;
 	private static ColorSettings getColorSettings() {
 		if (instance == null) {
 			LOGGER.log(Level.CONFIG, "Using Color Theme: " + theme);
@@ -374,7 +377,7 @@ public class ColorTheme {
 	 * @param color is BACKGROUND_TOP for the upper rectangle or BACKGROUND_BOTTTOM
 	 * for the lower one
 	 * @return the color to use for the background rectangle
-	 */
+	 *
 	public static Color getColor(MazeColors color, float percentToExit) {
 		return getColorSettings().getColor(color, percentToExit);
 	}
@@ -387,7 +390,7 @@ public class ColorTheme {
      * @param cc is an obscure parameter used in Wall for color determination, just passed in here
      * @param extensionX is the wall's length and direction (sign), horizontal dimension
      * @return the rgb value for the color of the wall
-     */
+     *
     public static int getWallColor(int distance, int cc, int extensionX) {
     	return getColorSettings().getWallColor(distance,cc,extensionX).getRGB(); 
     };
@@ -395,3 +398,4 @@ public class ColorTheme {
  
 
 }
+*/
