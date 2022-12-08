@@ -53,7 +53,7 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
     private String tag = "GeneratingActivity";
     protected MazeFactory factory;
     private Order.Builder builder;
-    private Maze maze;
+    public static Maze maze;
     private RevisitData Revisit;
     /**
      * Creates the activity by assigning view elements their jobs
@@ -170,7 +170,7 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
             @Override
             public void handleMessage(Message msg){
                 Bundle bundle = msg.getData();
-                int progressBarMessage = bundle.getInt("progress");
+                progress = bundle.getInt("progress");
                 Log.v(tag, "Loading bar: " + progressBar.toString());
             }
         };
@@ -264,13 +264,11 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
         factory = new MazeFactory();
         switch(bundle.getString("Algorithm")){
             case "DFS":
+            case "Boruvka":
                 builder = Builder.DFS;
                 break;
             case "Prim":
                 builder = Builder.Prim;
-                break;
-            case "Boruvka":
-                builder = Builder.Boruvka;
                 break;
 
         }

@@ -1,9 +1,6 @@
 package edu.wm.cs.cs301.DuohanXu.gui;
 
-import android.util.Log;
-
 import edu.wm.cs.cs301.DuohanXu.gui.Constants.UserInput;
-import edu.wm.cs.cs301.DuohanXu.gui.Robot.Direction;
 
 import java.util.logging.Logger;
 
@@ -37,7 +34,7 @@ import edu.wm.cs.cs301.DuohanXu.generation.Maze;
  * Paul Falstad granted permission to modify and use code for teaching purposes.
  * Refactored by Peter Kemper
  */
-public class StatePlaying implements State {
+public class StatePlaying{
 	
 	
 	/**
@@ -102,9 +99,11 @@ public class StatePlaying implements State {
     private boolean showSolution;       // toggle switch to show solution in overall maze on screen
     private boolean mapMode; // true: display map of maze, false: do not display map of maze
     // mapMode is toggled by user keyboard input, causes a call to drawMap during play mode
+    private boolean playManually = false;
 
     // current position and direction with regard to MazeConfiguration
     int px, py ; // current position on maze grid (x,y)
+    int dx, dy;  // current direction
     CardinalDirection cd;
 
     int angle; // current viewing angle, east == 0 degrees
@@ -134,7 +133,7 @@ public class StatePlaying implements State {
     	firstPersonView = null; // initialized in start method
     	mapView = null; // initialized in start method
     	panel = null; // provided by start method
-    	control = null; // provided by start method
+    	//control = null; // provided by start method
     	started = false; // method start has not been called yet
 
     	maze = null; // provided by set method
@@ -160,14 +159,7 @@ public class StatePlaying implements State {
     public void setMaze(Maze maze) {
         this.maze = maze;
     }
-    /**
-     * Start the actual game play by showing the playing screen.
-     * If the panel is null, all drawing operations are skipped.
-     * This mode of operation is useful for testing purposes, 
-     * i.e., a dryrun of the game without the graphics part.
-     * @param controller provides access to the controller this state resides in
-     * @param panel is part of the UI and visible on the screen, needed for drawing
-     */
+
     public void setPlayAnimationActivity(PlayAnimationActivity playAnimationActivity){
         this.playAnimationActivity = playAnimationActivity;
     }
@@ -176,12 +168,20 @@ public class StatePlaying implements State {
         this.playManuallyActivity = playManuallyActivity;
         playManually = true;
     }
-    public void start(Control controller, MazePanel panel) {
-    	assert null != maze : "StatePlaying.start: maze must exist!";
+    /**
+     * Start the actual game play by showing the playing screen.
+     * If the panel is null, all drawing operations are skipped.
+     * * This mode of operation is useful for testing purposes,
+     * i.e., a dryrun of the game without the graphics part.
+     * @param panel is part of the UI and visible on the screen, needed for drawing
+     */
+    public void start(MazePanel panel) {
+        maze = GeneratingActivity.maze;
+        assert null != maze : "StatePlaying.start: maze must exist!";
     	
         started = true;
         // keep the reference to the controller to be able to call method to switch the state
-        control = controller;
+        //control = controller;
         // keep the reference to the panel for drawing
         this.panel = panel;
         //
@@ -189,7 +189,7 @@ public class StatePlaying implements State {
         showMaze = false ;
         showSolution = false ;
         mapMode = false;
-        
+
         // adjust internal state of maze model
         // init data structure for visible walls
         seenCells = new Floorplan(maze.getWidth()+1,maze.getHeight()+1) ;
@@ -205,7 +205,7 @@ public class StatePlaying implements State {
         }
         /**
          * The code below initiates the robot driving process if the controller has them.
-         */
+         *
         robot = controller.getRobot();
         driver = controller.getDriver();
         String sens = controller.getReOrUnre();
@@ -256,9 +256,10 @@ public class StatePlaying implements State {
         		driver.setRobot(robot);
         		drive();
         }
-        }
+        }*/
     }
-    
+
+    /**
     private void startSensor() {
     	Runnable process = () -> {
     		for (Direction dir : Direction.values()) {
@@ -314,7 +315,7 @@ public class StatePlaying implements State {
 			switchFromPlayingToWinning(driver.getPathLength(), energyConsumption, false);
     	}
     }
-    
+    */
     
     /**
      * Initializes the drawer for the first person view
@@ -332,7 +333,8 @@ public class StatePlaying implements State {
 		
 		mapView = new Map(seenCells, 15, maze) ;
 		// draw the initial screen for this state
-		draw(cd.angle(), 0);
+		//draw(cd.angle(), 0);
+        draw();
 	}
     /**
      * Internal method to set the current position, the direction
@@ -342,7 +344,13 @@ public class StatePlaying implements State {
 	private void setPositionDirectionViewingDirection() {
         int[] start = maze.getStartingPosition() ;
         setCurrentPosition(start[0],start[1]) ;
-        cd = CardinalDirection.East;
+        //cd = CardinalDirection.East;
+        angle = 0; // angle matches with east direction,
+        // hidden consistency constraint!
+        setDirectionToMatchCurrentAngle();
+        // initial direction is east, check this for sanity:
+        assert(dx == 1);
+        assert(dy == 0);
 	}
  
 	/**
@@ -397,7 +405,7 @@ public class StatePlaying implements State {
     /**
      * The method provides an appropriate response to user keyboard input. 
      * The control calls this method to communicate input and delegate its handling.
-     * Method requires {@link #start(Control, MazePanel) start} to be
+     * Method requires {@link #start(MazePanel) start} to be
      * called before.
      * @param userInput provides the feature the user selected
      * @param value is not used in this state, exists only for consistency across State classes
@@ -423,7 +431,14 @@ public class StatePlaying implements State {
             // check termination, did we leave the maze?
             if (isOutside(px,py)) {
             	// TODO: provide actual path length
-                switchFromPlayingToWinning(0);
+                //switchFromPlayingToWinning(0);
+                if(playManually){
+                    playManuallyActivity.sendWinningMessage(panel);
+                }
+                else{
+                    //playAnimationActivity.sendWinningMessage(panel);
+                }
+                break;
             }
             break;
         case LEFT: // turn left
@@ -440,44 +455,55 @@ public class StatePlaying implements State {
             // check termination, did we leave the maze?
             if (isOutside(px,py)) {
             	// TODO: provide actual path length
-                switchFromPlayingToWinning(0);
+                //switchFromPlayingToWinning(0);
+                if(playManually){
+                    playManuallyActivity.sendWinningMessage(panel);
+                }
+                else{
+                   // playAnimationActivity.sendWinningMessage(panel);
+                }
             }
             break;
         case RETURNTOTITLE: // escape to title screen
-            switchToTitle();
+            //switchToTitle();
             break;
         case JUMP: // make a step forward even through a wall
         	LOGGER.fine("Jump 1 step forward");
             // go to position if within maze
-        	int[] tmpDxDy = cd.getDxDyDirection();
-        	if (maze.isValidPosition(px + tmpDxDy[0], py + tmpDxDy[1])) {
-                setCurrentPosition(px + tmpDxDy[0], py + tmpDxDy[1]) ;
-                draw(cd.angle(), 0) ;
+        	//int[] tmpDxDy = cd.getDxDyDirection();
+        	//if (maze.isValidPosition(px + tmpDxDy[0], py + tmpDxDy[1])) {
+                //setCurrentPosition(px + tmpDxDy[0], py + tmpDxDy[1]) ;
+               // draw(cd.angle(), 0) ;
+            //}
+
+            if (maze.isValidPosition(px + dx, py + dy)) {
+            setCurrentPosition(px + dx, py + dy) ;
+            draw() ;
             }
             break;
         case TOGGLELOCALMAP: // show local information: current position and visible walls
             // precondition for showMaze and showSolution to be effective
             // acts as a toggle switch
-            mapMode = !mapMode;         
-            draw(cd.angle(), 0) ; 
+            mapMode = !mapMode;
+            draw() ;
             break;
         case TOGGLEFULLMAP: // show the whole maze
             // acts as a toggle switch
-            showMaze = !showMaze;       
-            draw(cd.angle(), 0) ; 
+            showMaze = !showMaze;
+            draw() ;
             break;
         case TOGGLESOLUTION: // show the solution as a yellow line towards the exit
             // acts as a toggle switch
-            showSolution = !showSolution;       
-            draw(cd.angle(), 0) ;
+            showSolution = !showSolution;
+            draw() ;
             break;
         case ZOOMIN: // zoom into map
-        	mapView.incrementMapScale(); 
-            draw(cd.angle(), 0) ;
+        	mapView.incrementMapScale();
+            draw() ;
             break ;
         case ZOOMOUT: // zoom out of map
-        	mapView.decrementMapScale(); 
-            draw(cd.angle(), 0) ; 
+        	mapView.decrementMapScale();
+            draw() ;
             break ;
         } // end of internal switch statement for playing state
         return true;
@@ -489,41 +515,26 @@ public class StatePlaying implements State {
     }
     /**
      * Draws the current content on panel to show it on screen.
-     * @param angle the current viewing angle, east == 0 degrees, south == 90, west == 180, north == 270
-     * @param walkStep a counter for intermediate steps within a single step forward or backward
      */
-    protected void draw(int angle, int walkStep) {
+    protected void draw() {
     	 
     	if (panel == null) {
     		printWarning();
     		return;
     	}
     	// draw the first person view and the map view if wanted
-    	firstPersonView.draw(panel, px, py, walkStep, angle, 
-    			maze.getPercentageForDistanceToExit(px, py)) ;
+    	firstPersonView.draw(panel, px, py, walkStep, angle, maze.getPercentageForDistanceToExit(px, py)) ;
         if (isInMapMode()) {
-			mapView.draw(panel, px, py, angle, walkStep,
-					isInShowMazeMode(),isInShowSolutionMode()) ;
+			mapView.draw(panel, px, py, angle, walkStep, isInShowMazeMode(),isInShowSolutionMode()) ;
 		}
 		// update the screen with the buffer graphics
-        panel.update() ;
-    }
-
-    protected void draw() {
-        if (panel == null) {
-            printWarning();
-            return;
-        }
-        // draw the first person view and the map view if wanted
-        firstPersonView.draw(panel, px, py, walkStep, angle, getPercentageForDistanceToExit()) ;
-        if (isInMapMode()) {
-            Log.d("in", "map mode in StatePlaying.draw");
-            mapView.draw(panel, px, py, angle, walkStep,
-                    isInShowMazeMode(),isInShowSolutionMode()) ;
-        }
-        // update the screen with the buffer graphics
         panel.commit() ;
     }
+    float getPercentageForDistanceToExit() {
+        return maze.getDistanceToExit(px, py) /
+                ((float) maze.getMazedists().getMaxDistance());
+    }
+
     /**
      * Prints the warning about a missing panel only once
      */
@@ -540,7 +551,17 @@ public class StatePlaying implements State {
         px = x ;
         py = y ;
     }
- 
+    private void setCurrentDirection(int x, int y) {
+        dx = x ;
+        dy = y ;
+    }
+    /**
+     * Sets fields dx and dy to be consistent with
+     * current setting of field angle.
+     */
+    private void setDirectionToMatchCurrentAngle() {
+        setCurrentDirection((int) Math.cos(radify(angle)), (int) Math.sin(radify(angle))) ;
+    }
     ////////////////////////////// get methods ///////////////////////////////////////////////////////////////
     protected int[] getCurrentPosition() {
         int[] result = new int[2];
@@ -549,7 +570,8 @@ public class StatePlaying implements State {
         return result;
     }
     protected CardinalDirection getCurrentDirection() {
-        return cd;
+        //return cd;
+        return CardinalDirection.getDirection(dx, dy);
     }
     boolean isInMapMode() { 
         return mapMode ; 
@@ -564,7 +586,9 @@ public class StatePlaying implements State {
         return maze ;
     }
     //////////////////////// Methods for move and rotate operations ///////////////
-    
+    final double radify(int x) {
+        return x*Math.PI/180;
+    }
     /**
      * Determines if one can walk in the given direction
      * @param dir is the direction of interest, either 1 or -1
@@ -573,8 +597,10 @@ public class StatePlaying implements State {
     protected boolean wayIsClear(int dir) {
         switch (dir) {
         case 1: // forward
+            cd = getCurrentDirection();
         	return !maze.hasWall(px, py, cd);
         case -1: // backward
+            cd = getCurrentDirection().oppositeDirection();
             return !maze.hasWall(px, py, cd.oppositeDirection());
         default:
             throw new RuntimeException("Unexpected direction value: " + dir);
@@ -583,9 +609,9 @@ public class StatePlaying implements State {
     /**
      * Draws and waits. Used to obtain a smooth appearance for rotate and move operations
      */
-    private void slowedDownRedraw(int angle, int walkStep) {
+    private void slowedDownRedraw() {
     	LOGGER.fine("Drawing intermediate figures: angle " + angle + ", walkStep " + walkStep);
-        draw(angle, walkStep) ;
+        draw() ;
         try {
             Thread.sleep(25);
         } catch (Exception e) { 
@@ -600,9 +626,9 @@ public class StatePlaying implements State {
      * @param dir for current direction, values are either 1 or -1
      */
     private synchronized void rotate(int dir) {
-        final int originalAngle = cd.angle();//angle;
+        final int originalAngle = angle;//angle;
         final int steps = 4;
-        int angle = originalAngle; // just in case for loop is skipped
+        //int angle = originalAngle; // just in case for loop is skipped
         for (int i = 0; i != steps; i++) {
             // add 1/4 of 90 degrees per step 
             // if dir is -1 then subtract instead of addition
@@ -610,11 +636,12 @@ public class StatePlaying implements State {
             angle = (angle+1800) % 360;
             // draw method is called and uses angle field for direction
             // information.
-			slowedDownRedraw(angle, 0);
+			slowedDownRedraw();
         }
         // update maze direction only after intermediate steps are done
         // because choice of direction values are more limited.
-        cd = CardinalDirection.getDirection(angle);
+        //cd = CardinalDirection.getDirection(angle);
+        setDirectionToMatchCurrentAngle();
         logPosition(); // debugging
         drawHintIfNecessary(); 
     }
@@ -628,7 +655,7 @@ public class StatePlaying implements State {
     	// check if there is a wall in the way
         if (!wayIsClear(dir))
             return;
-        int walkStep = 0;
+
         // walkStep is a parameter of FirstPersonView.draw()
         // it is used there for scaling steps
         // so walkStep is implicitly used in slowedDownRedraw
@@ -636,11 +663,13 @@ public class StatePlaying implements State {
         // FirstPersonView and Map
         for (int step = 0; step != 4; step++) {
             walkStep += dir;
-            slowedDownRedraw(cd.angle(), walkStep);
+            slowedDownRedraw();
         }
         // update position to neighbor
-        int[] tmpDxDy = cd.getDxDyDirection();
-        setCurrentPosition(px + dir*tmpDxDy[0], py + dir*tmpDxDy[1]) ;
+        //int[] tmpDxDy = cd.getDxDyDirection();
+        //setCurrentPosition(px + dir*tmpDxDy[0], py + dir*tmpDxDy[1]) ;
+        setCurrentPosition(px + dir*dx, py + dir*dy) ;
+        walkStep = 0;
         logPosition(); // debugging
         drawHintIfNecessary();  
     }
@@ -672,16 +701,23 @@ public class StatePlaying implements State {
     	}
     	// if current position faces a dead end, show map with solution
     	// for guidance
-    	if (maze.isFacingDeadEnd(px, py, cd)) {
+    	if (isFacingDeadEnd()) {
         	//System.out.println("Facing deadend, help by showing solution");
-        	mapView.draw(panel, px, py, cd.angle(), 0, true, true) ;
+        	mapView.draw(panel, px, py, angle, walkStep, true, true) ;
         }
     	else {
     		// draw compass rose
-    		cr.setCurrentDirection(cd);
-    		cr.paintComponent(panel.getBufferGraphics());
+    		cr.setCurrentDirection(getCurrentDirection());
+    		cr.paintComponent(panel);
     	}
-    	panel.update();
+    	panel.commit();
+    }
+
+    private boolean isFacingDeadEnd() {
+        return (!isOutside(px,py) &&
+                GeneratingActivity.maze.hasWall(px, py, getCurrentDirection()) &&
+                GeneratingActivity.maze.hasWall(px, py, getCurrentDirection().oppositeDirection().rotateClockwise()) &&
+                GeneratingActivity.maze.hasWall(px, py, getCurrentDirection().rotateClockwise()));
     }
  
     /////////////////////// Methods for debugging ////////////////////////////////

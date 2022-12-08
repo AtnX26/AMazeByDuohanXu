@@ -19,12 +19,14 @@ import edu.wm.cs.cs301.DuohanXu.R;
  */
 
 public class PlayManuallyActivity extends AppCompatActivity {
+    ToggleButton showMap, showWall, showSolution;
     private String tag = "PlayManuallyActivity";
     private static final int MAX_MAP_SIZE = 80;  //max size that the map can be
     private static final int MIN_MAP_SIZE = 1;  //min size that the map can be
     private MazePanel mazePanel;
-    private int pathlegnth;
     private int mapSize = 15;
+    private int pathlegnth = 0;
+    protected static int shortestPathLength = 0;
     StatePlaying statePlaying;
     /**
      * Creates the activity by assigning view elements their jobs
@@ -42,8 +44,13 @@ public class PlayManuallyActivity extends AppCompatActivity {
         final MazePanel panel = (MazePanel) findViewById(R.id.ManualMazePanel);
         //Set the boolean to true so that the panel will deliver the image with a ball and
         //two rectangles.
-        panel.setManorAni(true);
+        statePlaying = new StatePlaying();
+        statePlaying.setPlayManuallyActivity(this);
+        statePlaying.start(panel);
         Log.v(tag,"MazePanel started");
+
+        int[] startPos = GeneratingActivity.maze.getStartingPosition();
+        shortestPathLength = GeneratingActivity.maze.getDistanceToExit(startPos[0], startPos[1])-1;
 
         pathlegnth = 0;
 
@@ -111,7 +118,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
         /**
          * Three toggles that adjust the visibility of maze ,etc.
          */
-        ToggleButton showMap = (ToggleButton) findViewById(R.id.toggleMap);
+        showMap = (ToggleButton) findViewById(R.id.toggleMap);
         showMap.setOnClickListener(new View.OnClickListener() {
             //Create new event when clicked; only shows log for P6
             @Override
@@ -125,7 +132,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
             }
         });
 
-        ToggleButton showSolution = (ToggleButton) findViewById(R.id.toggleSolution);
+        showSolution = (ToggleButton) findViewById(R.id.toggleSolution);
         showSolution.setOnClickListener(new View.OnClickListener() {
             //Create new event when clicked; only shows log for P6
             @Override
@@ -139,15 +146,17 @@ public class PlayManuallyActivity extends AppCompatActivity {
             }
         });
 
-        ToggleButton showWall = (ToggleButton) findViewById(R.id.toggleWalls);
+        showWall = (ToggleButton) findViewById(R.id.toggleWalls);
         showWall.setOnClickListener(new View.OnClickListener() {
             //Create new event when clicked; only shows log for P6
             @Override
             public void onClick(View v) {
                 if (showWall.isChecked() == false){
+                    statePlaying.handleUserInput(Constants.UserInput.TOGGLEFULLMAP, 1);
                     Log.v(tag, "Wall show off");
                 }
                 else{
+                    statePlaying.handleUserInput(Constants.UserInput.TOGGLEFULLMAP, 1);
                     Log.v(tag, "Wall show on");
                 }
             }
@@ -197,6 +206,16 @@ public class PlayManuallyActivity extends AppCompatActivity {
         bundle.putInt("Energy consumed", energyConsumed);
         bundle.putInt("Distance to exit", distance2Exit);
         intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+    public void sendWinningMessage(View view){
+        //DataHolder.setPathlength(pathlength);
+        Intent intent = new Intent(this, WinningActivity.class);
+        //Bundle bundle = getIntent().getExtras();
+        //bundle.putInt("Path Length", pathLength);
+        //bundle.putInt("Shortest Path Length", shortestPathLength);
+        //intent.putExtras(bundle);
         startActivity(intent);
     }
 
