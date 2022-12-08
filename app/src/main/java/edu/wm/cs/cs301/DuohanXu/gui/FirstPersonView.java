@@ -14,7 +14,7 @@ import edu.wm.cs.cs301.DuohanXu.generation.BSPLeaf;
 import edu.wm.cs.cs301.DuohanXu.generation.BSPNode;
 import edu.wm.cs.cs301.DuohanXu.generation.Floorplan;
 import edu.wm.cs.cs301.DuohanXu.generation.Wall;
-import edu.wm.cs.cs301.DuohanXu.gui.ColorTheme.MazeColors;
+//import edu.wm.cs.cs301.DuohanXu.gui.ColorTheme.MazeColors;
 
 /**
  * This class encapsulates all functionality for drawing the current view 

@@ -3,7 +3,7 @@ package edu.wm.cs.cs301.DuohanXu.gui;
 import android.graphics.Color;
 
 import edu.wm.cs.cs301.DuohanXu.generation.CardinalDirection;
-import edu.wm.cs.cs301.DuohanXu.gui.ColorTheme.MazeColors;
+//import edu.wm.cs.cs301.DuohanXu.gui.ColorTheme.MazeColors;
 import edu.wm.cs.cs301.DuohanXu.gui.MazePanel;
 
 /**

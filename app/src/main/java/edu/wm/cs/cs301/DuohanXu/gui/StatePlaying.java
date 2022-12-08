@@ -1,13 +1,15 @@
 package edu.wm.cs.cs301.DuohanXu.gui;
 
-import gui.Constants.UserInput;
-import gui.Robot.Direction;
+import android.util.Log;
+
+import edu.wm.cs.cs301.DuohanXu.gui.Constants.UserInput;
+import edu.wm.cs.cs301.DuohanXu.gui.Robot.Direction;
 
 import java.util.logging.Logger;
 
-import generation.CardinalDirection;
-import generation.Floorplan;
-import generation.Maze;
+import edu.wm.cs.cs301.DuohanXu.generation.CardinalDirection;
+import edu.wm.cs.cs301.DuohanXu.generation.Floorplan;
+import edu.wm.cs.cs301.DuohanXu.generation.Maze;
 
 
 /**
@@ -78,22 +80,24 @@ public class StatePlaying implements State {
      * plus switch control to the next state, which 
      * is the maze generating state.
      */
-    private Control control;
+    //private Control control;
 
     /**
      * The robot that interacts with the controller starting from P3
      */
-    Robot robot;
+    //Robot robot;
     /**
      * The driver that interacts with the robot starting from P3
      */
-    RobotDriver driver;
+    //RobotDriver driver;
 
     /**
      * Maze holds the main information on where walls are.
      */
-    Maze maze ; 
+    Maze maze ;
 
+    private PlayAnimationActivity playAnimationActivity;
+    private PlayManuallyActivity playManuallyActivity;
     private boolean showMaze;           // toggle switch to show overall maze on screen
     private boolean showSolution;       // toggle switch to show solution in overall maze on screen
     private boolean mapMode; // true: display map of maze, false: do not display map of maze
@@ -102,8 +106,9 @@ public class StatePlaying implements State {
     // current position and direction with regard to MazeConfiguration
     int px, py ; // current position on maze grid (x,y)
     CardinalDirection cd;
-    
-  
+
+    int angle; // current viewing angle, east == 0 degrees
+    int walkStep; // counter for intermediate steps within a single step forward or backward
     Floorplan seenCells; // a matrix with cells to memorize which cells are visible from the current point of view
     // the FirstPersonView obtains this information and the Map uses it for highlighting currently visible walls on the map
     
@@ -163,6 +168,14 @@ public class StatePlaying implements State {
      * @param controller provides access to the controller this state resides in
      * @param panel is part of the UI and visible on the screen, needed for drawing
      */
+    public void setPlayAnimationActivity(PlayAnimationActivity playAnimationActivity){
+        this.playAnimationActivity = playAnimationActivity;
+    }
+
+    public void setPlayManuallyActivity(PlayManuallyActivity playManuallyActivity){
+        this.playManuallyActivity = playManuallyActivity;
+        playManually = true;
+    }
     public void start(Control controller, MazePanel panel) {
     	assert null != maze : "StatePlaying.start: maze must exist!";
     	
@@ -335,7 +348,7 @@ public class StatePlaying implements State {
 	/**
      * Switches the controller to the final screen
      * @param pathLength gives the length of the path
-     */
+     *
     public void switchFromPlayingToWinning(int pathLength) {
     	// need to instantiate and configure the winning state
         StateWinning currentState = new StateWinning();
@@ -352,7 +365,7 @@ public class StatePlaying implements State {
         control.setState(currentState);
         currentState.start(control, panel);
     }
-    
+
     public void switchFromPlayingToWinning(int pathLength, int energyConsumption, boolean win) {
     	//resetRobot();
     	StateWinning currentState = new StateWinning();
@@ -363,9 +376,10 @@ public class StatePlaying implements State {
         control.setState(currentState);
         currentState.start(control, panel);
     }
+    */
     /**
      * Switches the controller to the initial screen.
-     */
+     *
     public void switchToTitle() {
        	// need to instantiate and configure the title state
         StateTitle currentState = new StateTitle();
@@ -378,7 +392,8 @@ public class StatePlaying implements State {
         control.setState(currentState);
         currentState.start(control, panel);
     }
-    
+    */
+
     /**
      * The method provides an appropriate response to user keyboard input. 
      * The control calls this method to communicate input and delegate its handling.
@@ -467,6 +482,11 @@ public class StatePlaying implements State {
         } // end of internal switch statement for playing state
         return true;
     }
+
+    public void setMapScale(int scale){
+        mapView.setScale(scale);
+        draw();
+    }
     /**
      * Draws the current content on panel to show it on screen.
      * @param angle the current viewing angle, east == 0 degrees, south == 90, west == 180, north == 270
@@ -489,6 +509,21 @@ public class StatePlaying implements State {
         panel.update() ;
     }
 
+    protected void draw() {
+        if (panel == null) {
+            printWarning();
+            return;
+        }
+        // draw the first person view and the map view if wanted
+        firstPersonView.draw(panel, px, py, walkStep, angle, getPercentageForDistanceToExit()) ;
+        if (isInMapMode()) {
+            Log.d("in", "map mode in StatePlaying.draw");
+            mapView.draw(panel, px, py, angle, walkStep,
+                    isInShowMazeMode(),isInShowSolutionMode()) ;
+        }
+        // update the screen with the buffer graphics
+        panel.commit() ;
+    }
     /**
      * Prints the warning about a missing panel only once
      */

@@ -3,10 +3,13 @@
  */
 package edu.wm.cs.cs301.DuohanXu.gui;
 
+import android.graphics.Color;
+import android.util.Log;
+
 import edu.wm.cs.cs301.DuohanXu.generation.CardinalDirection;
 import edu.wm.cs.cs301.DuohanXu.generation.Floorplan;
 import edu.wm.cs.cs301.DuohanXu.generation.Maze;
-import edu.wm.cs.cs301.DuohanXu.gui.ColorTheme.MazeColors;
+//import edu.wm.cs.cs301.DuohanXu.gui.ColorTheme.MazeColors;
 
 import java.util.logging.Logger;
 
@@ -42,7 +45,10 @@ public class Map {
 	final int viewHeight; // set to Constants.VIEW_HEIGHT
 	final int mapUnit;    // set to Constants.MAP_UNIT
 	final int stepSize;  // set to Constants.STEP_SIZE, typical value: map_unit/4
-	
+	private static final int WHITE = Color.WHITE;
+	private static final int RED = Color.RED;
+	private static final int YELLOW = Color.YELLOW;
+
 	/**
 	 * The user can increment or decrement the scale of the map.
 	 * map_scale is used to keep track of the current setting.
@@ -146,6 +152,10 @@ public class Map {
         drawMap(panel, x, y, walkStep, viewDX, viewDY, showMaze, showSolution) ;
         drawCurrentLocation(panel, viewDX, viewDY) ;
 	}
+
+	public void setScale(int scale){
+		mapScale = scale;
+	}
 	//////////////////////////////// private, internal methods //////////////////////////////
 	/**
 	 * Computes the x coordinate for the viewing direction for the given angle
@@ -171,7 +181,7 @@ public class Map {
 	 * The map is drawn only on a small rectangle inside the maze area such that only a part of the map is actually shown.
 	 * Of course a part covering the current location needs to be displayed.
 	 * The current cell is (px,py). There is a viewing direction (view_dx, view_dy).
-	 * @param g graphics handler to manipulate screen
+	 * @param panel graphics handler to manipulate screen
 	 * @param px current position, x index
 	 * @param py current position, y index
 	 * @param walkStep is a counter between 0, 1, 2, ..., 3
@@ -187,8 +197,9 @@ public class Map {
 		// dimensions of the maze in terms of cell ids
 		final int mazeWidth = maze.getWidth() ;
 		final int mazeHeight = maze.getHeight() ;
-		
-		panel.setColor(ColorTheme.getColor(MazeColors.MAP_DEFAULT));
+		Log.d("inside", "drawMap private method in map.java");
+		panel.setColor(WHITE);
+		//panel.setColor(ColorTheme.getColor(MazeColors.MAP_DEFAULT));
 		
 		// note: 1/2 of width and height is the center of the screen
 		// the whole map is centered at the current position
@@ -213,14 +224,31 @@ public class Map {
 				// starting point of line
 				int startX = mapToCoordinateX(x, offsetX);
 				int startY = mapToCoordinateY(y, offsetY);
-				if (x < mazeWidth)
-					drawHorizontalLine(g, showMaze, x, y, startX, startY);
-				if (y < mazeHeight)
-					drawVerticalLine(g, showMaze, x, y, startX, startY);
+				//if (x < mazeWidth)
+				//	drawHorizontalLine(g, showMaze, x, y, startX, startY);
+				//if (y < mazeHeight)
+				//	drawVerticalLine(g, showMaze, x, y, startX, startY);
+				// draw horizontal line
+				boolean theCondition = (x >= mazeWidth) ? false : ((y < mazeHeight) ?
+						maze.hasWall(x,y, CardinalDirection.North) :
+						maze.hasWall(x,y-1, CardinalDirection.South));
+
+				panel.setColor(seenWalls.hasWall(x,y, CardinalDirection.North) ? WHITE : Color.BLACK);
+				if ((seenWalls.hasWall(x,y, CardinalDirection.North) || showMaze) && theCondition)
+					panel.addLine(startX, startY, startX + mapScale, startY); // y coordinate same
+
+				// draw vertical line
+				theCondition = (y >= mazeHeight) ? false : ((x < mazeWidth) ?
+						maze.hasWall(x,y, CardinalDirection.West) :
+						maze.hasWall((x-1),y, CardinalDirection.East));
+
+				panel.setColor(seenWalls.hasWall(x,y, CardinalDirection.West) ? WHITE : Color.BLACK);
+				if ((seenWalls.hasWall(x,y, CardinalDirection.West) || showMaze) && theCondition)
+					panel.addLine(startX, startY, startX, startY - mapScale); // x coordinate same
 			}
 		
 		if (showSolution) {
-			drawSolution(g, offsetX, offsetY, px, py) ;
+			drawSolution(panel, offsetX, offsetY, px, py) ;
 		}
 	}
 
@@ -232,7 +260,7 @@ public class Map {
 	 * @param y current y index
 	 * @param startX the x coordinate for drawing
 	 * @param startY the y coordinate for drawing
-	 */
+	 *
 	private void drawVerticalLine(Graphics g, boolean showMaze, int x, int y, int startX, int startY) {
 		if (hasAVerticalWall(x, y) && 
 				(seenWalls.hasWall(x, y, CardinalDirection.West) || showMaze)) {
@@ -242,19 +270,19 @@ public class Map {
 			g.drawLine(startX, startY, startX, startY - mapScale); 
 		}
 	}
-	
+	*/
 	/**
 	 * Check if there is a wall on the west side of the (x,y) position in the maze
 	 * @param x index for position in maze
 	 * @param y index for position in maze
 	 * @return true if there is a wall on the west side
-	 */
+	 *
 	private boolean hasAVerticalWall(int x, int y) {
 		return (x < maze.getWidth()) ? 
 				maze.hasWall(x, y, CardinalDirection.West) :
 					maze.hasWall((x-1), y, CardinalDirection.East);
 	}
-	
+	*/
 	/**
 	 * Draw a horizontal line for the overall map
 	 * @param g the graphics object to draw on
@@ -263,7 +291,7 @@ public class Map {
 	 * @param y current y index
 	 * @param startX the x coordinate for drawing
 	 * @param startY the y coordinate for drawing
-	 */
+	 *
 	private void drawHorizontalLine(Graphics g, boolean showMaze, int x, int y, int startX,
 			int startY) {
 		if (hasAHorizontalWall(x, y) && (seenWalls.hasWall(x,y, CardinalDirection.North) || showMaze) ) {
@@ -273,19 +301,19 @@ public class Map {
 			g.drawLine(startX, startY, startX + mapScale, startY); 
 		}
 	}
-	
+	*/
 	/**
 	 * Check if there is a wall on the north side of the (x,y) position in the maze
 	 * @param x index for position in maze
 	 * @param y index for position in maze
 	 * @return true if there is a wall on the north side
-	 */
+	 *
 	private boolean hasAHorizontalWall(int x, int y) {
 		return (y < maze.getHeight()) ?
 				maze.hasWall(x,y, CardinalDirection.North) :
 					maze.hasWall(x,y-1, CardinalDirection.South);
 	}
-	
+	*/
 	/**
 	 * Obtains the maximum for a given offset
 	 * @param offset either in x or y direction
@@ -392,12 +420,13 @@ public class Map {
 	 * the size of a single cell to avoid that the circle
 	 * or arrow visually collide with an adjacent wallboard on the
 	 * map visualization. 
-	 * @param gc to draw on
+	 * @param panel to draw on
 	 * @param viewDX is the current viewing direction, x coordinate
 	 * @param viewDY is the current viewing direction, y coordinate
 	 */
 	private void drawCurrentLocation(MazePanel panel, int viewDX, int viewDY) {
-		panel.setColor(ColorTheme.getColor(MazeColors.MAP_CURRENTLOCATION));
+		//panel.setColor(ColorTheme.getColor(MazeColors.MAP_CURRENTLOCATION));
+		panel.setColor(RED);
 		// draw oval of appropriate size at the center of the screen
 		int centerX = viewWidth/2; // center x
 		int centerY = viewHeight/2; // center y
@@ -413,7 +442,7 @@ public class Map {
 
 	/**
 	 * Draws an arrow either in horizontal or vertical direction.
-	 * @param gc to draw on
+	 * @param panel to draw on
 	 * @param viewDX is the current viewing direction, x coordinate
 	 * @param viewDY is the current viewing direction, y coordinate
 	 * @param startX is the x coordinate of the starting point
@@ -454,7 +483,7 @@ public class Map {
 	 * and showSolution are true.
 	 * Since the current position is fixed at the center of the screen, 
 	 * all lines on the map are drawn with some offset.
-	 * @param gc to draw lines on
+	 * @param panel to draw lines on
 	 * @param offsetX is the offset for x coordinates
 	 * @param offsetY is the offset for y coordinates
 	 * @param px is the current position, an index x for a cell
@@ -472,8 +501,8 @@ public class Map {
 		int sx = px;
 		int sy = py;
 		int distance = maze.getDistanceToExit(sx, sy);
-		
-		panel.setColor(ColorTheme.getColor(MazeColors.MAP_SOLUTION));
+
+		panel.setColor(YELLOW);
 		
 		// while we are more than 1 step away from the final position
 		while (distance > 1) {

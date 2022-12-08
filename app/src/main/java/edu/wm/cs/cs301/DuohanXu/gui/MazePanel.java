@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import androidx.core.content.ContextCompat;
@@ -38,6 +39,7 @@ public class MazePanel extends View implements P7PanelF22{
     private static final int yellowWM = Color.parseColor("#FFFF99");
     private String markerFont;
 
+    private Bitmap.Config config;
     /**
      * Initiates the paint, bitmap and canvas for drawing
      * @param context
@@ -45,10 +47,14 @@ public class MazePanel extends View implements P7PanelF22{
      */
     public MazePanel(Context context, AttributeSet attrs) {
         super(context, attrs);
-        paint = new Paint();
-        bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888);
+        //paint = new Paint();
+        //bitmap = Bitmap.createBitmap(1000, 1000, Bitmap.Config.ARGB_8888);
+        //canvas = new Canvas(bitmap);
+        setFocusable(false);
+        config = Bitmap.Config.ARGB_8888;
+        bitmap = Bitmap.createBitmap(Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT, config);
         canvas = new Canvas(bitmap);
-
+        paint = new Paint();
     }
 
 
@@ -477,6 +483,29 @@ public class MazePanel extends View implements P7PanelF22{
     public void setFont(String fontName) {
         markerFont = fontName;
         paint.setFontFeatureSettings(fontName);
+    }
+
+    public Canvas getBufferGraphics() {
+        // if necessary instantiate and store a graphics object for later use
+        if (null == canvas) {
+            if (null == canvas) {
+                config = Bitmap.Config.ARGB_8888;
+                bitmap = Bitmap.createBitmap(Constants.VIEW_WIDTH, Constants.VIEW_HEIGHT, config);
+                if (null == bitmap)
+                {
+                    System.out.println("Error: creation of buffered image failed, presumedly container not displayable");
+                    return null; // still no buffer image, give up
+                }
+            }
+            canvas = new Canvas(bitmap);
+            if (null == canvas) {
+                System.out.println("Error: creation of graphics for buffered image failed, presumedly container not displayable");
+            }
+            else{
+                Log.v("MazePanel", "Using Rendering Hint");
+            }
+        }
+        return canvas;
     }
 
 }

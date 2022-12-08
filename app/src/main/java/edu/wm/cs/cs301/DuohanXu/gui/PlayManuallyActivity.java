@@ -20,9 +20,12 @@ import edu.wm.cs.cs301.DuohanXu.R;
 
 public class PlayManuallyActivity extends AppCompatActivity {
     private String tag = "PlayManuallyActivity";
+    private static final int MAX_MAP_SIZE = 80;  //max size that the map can be
+    private static final int MIN_MAP_SIZE = 1;  //min size that the map can be
     private MazePanel mazePanel;
     private int pathlegnth;
-
+    private int mapSize = 15;
+    StatePlaying statePlaying;
     /**
      * Creates the activity by assigning view elements their jobs
      * @param savedInstanceState
@@ -55,6 +58,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
             //Create new event when clicked; only shows log for P6
             @Override
             public void onClick(View v) {
+                statePlaying.handleUserInput(Constants.UserInput.LEFT, 1);
                 Log.v(tag, "left clicked");
             }
         });
@@ -64,6 +68,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
             //Create new event when clicked; only shows log for P6
             @Override
             public void onClick(View v) {
+                statePlaying.handleUserInput(Constants.UserInput.RIGHT, 1);
                 Log.v(tag, "right clicked");
             }
         });
@@ -73,6 +78,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
             //Create new event when clicked; only shows log for P6
             @Override
             public void onClick(View v) {
+                statePlaying.handleUserInput(Constants.UserInput.UP, 1);
                 Log.v(tag, "forward clicked");
                 pathlegnth++;
             }
@@ -83,6 +89,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
             //Create new event when clicked; only shows log for P6
             @Override
             public void onClick(View v) {
+                statePlaying.handleUserInput(Constants.UserInput.JUMP, 1);
                 Log.v(tag, "jump clicked");
                 pathlegnth++;
             }
@@ -150,9 +157,9 @@ public class PlayManuallyActivity extends AppCompatActivity {
          * Seek bar for adjusting the map size. Communicate with the MazePanel later in P7
          */
         final SeekBar mapSize = (SeekBar) findViewById(R.id.seekBarMapSize);
-        mapSize.setMin(1);
-        mapSize.setProgress(10);
-        mapSize.setMax(20);
+        mapSize.setMin(MIN_MAP_SIZE);
+        mapSize.setProgress(15);
+        mapSize.setMax(MAX_MAP_SIZE);
         mapSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int MapSize = 0;
 
@@ -166,11 +173,17 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                setMapSize(MapSize);
                 Log.v(tag, "Map size changed to "+ MapSize);
             }
         });
     }
 
+    private void setMapSize(int size){
+        mapSize = size;
+        statePlaying.setMapScale(mapSize);
+        //Log.v("Map Size: " + mapSize);
+    }
     /**
      * Private helper method for the short cut
      * @param view
