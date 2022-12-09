@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,12 +50,12 @@ public class AMazeActivity extends AppCompatActivity {
         SeekBar seekbar = findViewById(R.id.complexity);
         seekbar.setMax(9);
         seekbar.setProgress(0);
-        int seekBarValue= seekbar.getProgress();
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int passedValue = 0;
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 passedValue = progress;
+                skilllevel = progress;
             }
 
             @Override
@@ -82,6 +83,9 @@ public class AMazeActivity extends AppCompatActivity {
         revisitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (RevisitData.getAlgorithm() == null){
+                Toast.makeText(getApplicationContext(), "No data from last exploration!", Toast.LENGTH_SHORT).show();}
+                else{
                 Intent intent = new Intent(getApplicationContext(), GeneratingActivity.class);
                 Bundle bundle = new Bundle();
                 Log.v(tag, "Revisit button pressed, proceed to the next activity");
@@ -95,7 +99,7 @@ public class AMazeActivity extends AppCompatActivity {
                 bundle.putBoolean("Room", RevisitData.getRoom());
                 bundle.putBoolean("Revisit", true);
                 intent.putExtras(bundle);
-                startActivity(intent);
+                startActivity(intent);}
             }
         });
 
@@ -125,6 +129,7 @@ public class AMazeActivity extends AppCompatActivity {
                 DataContainer.setMazeAlgorithm(Algorithm);
                 //Now just give it a new seed
                 int newSeed = 3;
+                DataContainer.setSkillLevel(skilllevel);
                 bundle.putInt("Seed", newSeed);
                 bundle.putInt("Complexity",seekbar.getProgress());
                 bundle.putString("Algorithm",spinner.getSelectedItem().toString());

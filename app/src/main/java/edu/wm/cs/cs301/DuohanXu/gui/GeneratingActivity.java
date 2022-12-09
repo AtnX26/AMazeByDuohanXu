@@ -204,7 +204,8 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
                 }
                 return ++progress;
             }
-        }).start();/
+        }).start();
+         */
 
         /**
          * Set up the button to start playing the maze.

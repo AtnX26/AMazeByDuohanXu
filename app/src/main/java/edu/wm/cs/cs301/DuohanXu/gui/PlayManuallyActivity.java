@@ -124,9 +124,11 @@ public class PlayManuallyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (showMap.isChecked() == false){
+                    statePlaying.handleUserInput(Constants.UserInput.TOGGLELOCALMAP, 1);
                     Log.v(tag, "Map show off");
                 }
                 else{
+                    statePlaying.handleUserInput(Constants.UserInput.TOGGLELOCALMAP, 1);
                     Log.v(tag, "Map show on");
                 }
             }
@@ -138,9 +140,11 @@ public class PlayManuallyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (showSolution.isChecked() == false){
+                    statePlaying.handleUserInput(Constants.UserInput.TOGGLESOLUTION, 1);
                     Log.v(tag, "Solution show off");
                 }
                 else{
+                    statePlaying.handleUserInput(Constants.UserInput.TOGGLESOLUTION, 1);
                     Log.v(tag, "Solution show on");
                 }
             }

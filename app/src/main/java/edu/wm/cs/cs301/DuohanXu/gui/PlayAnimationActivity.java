@@ -2,6 +2,7 @@ package edu.wm.cs.cs301.DuohanXu.gui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,11 +22,15 @@ import edu.wm.cs.cs301.DuohanXu.R;
 public class PlayAnimationActivity extends AppCompatActivity {
     private String tag = "PlayAnimationActivity";
     private MazePanel mazePanel;
+    private static final int MAX_MAP_SIZE = 80;  //max size that the map can be
+    private static final int MIN_MAP_SIZE = 1;  //min size that the map can be
     private int pathlegnth;
     private int energyConsumed;
     private int distance2Exit;
     private boolean started = false;
-
+    StatePlaying statePlaying;
+    public static Handler myHandler;
+    private boolean isWizard = false;  // tells if the driver is the wizard algorithm
     /**
      * Creates the activity by assigning view elements their jobs
      * @param savedInstanceState
