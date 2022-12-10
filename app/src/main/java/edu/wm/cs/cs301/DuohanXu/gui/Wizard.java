@@ -113,6 +113,7 @@ public class Wizard implements RobotDriver{
 		wizardThread.start();
 	}
 
+	@Override
 	public void terminateThread(){
 		if(wizardThread != null){
 			wizardThread.interrupt();

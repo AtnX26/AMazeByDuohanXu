@@ -28,7 +28,7 @@ public class UnreliableSensor extends ReliableSensor implements DistanceSensor, 
 	protected Thread sensorThread;
 	private int repairTime = 2000;
 	private int failTime = 4000;
-
+	private String whichSensor;
 	
 	
 	
@@ -106,5 +106,10 @@ public class UnreliableSensor extends ReliableSensor implements DistanceSensor, 
 	 */
 	public void setWorking(boolean works) {
 		working = works;
+	}
+
+	@Override
+	public void setWhichSensor(String sensor){
+		whichSensor = sensor;
 	}
 }

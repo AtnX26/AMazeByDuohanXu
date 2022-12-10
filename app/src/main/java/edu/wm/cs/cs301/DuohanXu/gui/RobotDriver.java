@@ -78,6 +78,9 @@ public interface RobotDriver {
 	 * @return the total length of the journey in number of cells traversed
 	 */
 	int getPathLength();
-	
+
+    void terminateThread();
+
+	void setAnimationSpeed(int animationSpeed);
 }
 

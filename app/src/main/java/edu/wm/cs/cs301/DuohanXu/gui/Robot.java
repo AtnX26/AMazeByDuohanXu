@@ -50,7 +50,9 @@ import edu.wm.cs.cs301.DuohanXu.generation.CardinalDirection;
  *
  */
 public interface Robot {
-	/** 
+    void setPlayAnimationActivity(PlayAnimationActivity playAnimationActivity);
+
+    /** 
 	 * Describes all possible turns that a robot can do when it rotates on the spot.
 	 * Left is 90 degrees left, right is 90 degrees right, turn around is 180 degrees.
 	 */

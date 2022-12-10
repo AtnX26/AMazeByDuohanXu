@@ -73,8 +73,8 @@ public class ReliableRobot implements Robot{
 		maze = GeneratingActivity.maze;
 	}
 
-
-	void setPlayAnimationActivity(PlayAnimationActivity playAnimationActivity){
+    @Override
+	public void setPlayAnimationActivity(PlayAnimationActivity playAnimationActivity){
 		this.playAnimationActivity = playAnimationActivity;
 	}
 	/**

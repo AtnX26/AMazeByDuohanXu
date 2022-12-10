@@ -240,6 +240,8 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
                         Log.v(tag, "Selection reminder popped up");}
                     else{
                     Intent intent = new Intent(getApplicationContext(), PlayAnimationActivity.class);
+                    DataContainer.setRobotConfig(selectedRobot);
+                    DataContainer.setDriverConfig(selectedDriver);
                     bundle.putString("Driver", selectedDriver);
                     bundle.putString("Robot", selectedRobot);
                     intent.putExtras(bundle);
