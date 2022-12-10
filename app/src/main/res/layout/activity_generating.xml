@@ -134,7 +134,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="17dp"
         android:layout_marginTop="21dp"
-        android:text="Please wait, maze generating..."
+        android:text="Please wait, exploring the planet..."
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -44,6 +44,9 @@ public class AMazeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_amaze);
         Log.v(tag,"created");
 
+        Intent intent1 = new Intent(AMazeActivity.this, BGMService.class);
+        startService(intent1);
+        Log.v(tag,"BGM starts");
         /**
          * Control for the seekbar to adjust complexity
          */
@@ -206,5 +209,9 @@ public class AMazeActivity extends AppCompatActivity {
             }
         });
         return roomSpinner;
+    }
+    public void PlayBackgroundSound(View view) {
+        Intent intent = new Intent(AMazeActivity.this, BGMService.class);
+        startService(intent);
     }
 }

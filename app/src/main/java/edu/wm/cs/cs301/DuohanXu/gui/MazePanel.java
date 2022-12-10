@@ -1,5 +1,8 @@
 package edu.wm.cs.cs301.DuohanXu.gui;
 
+import static android.graphics.Color.DKGRAY;
+import static android.graphics.Color.LTGRAY;
+import static android.graphics.Color.WHITE;
 import static android.graphics.Color.rgb;
 
 import android.content.Context;
@@ -160,9 +163,9 @@ public class MazePanel extends View implements P7PanelF22{
     @Override
     public void addBackground(float percentToExit) {
         paint.setColor(getBackgroundColor(percentToExit, top));
-        if(!top){
-            paint.setColor(ContextCompat.getColor(getContext(), R.color.pink));
-        }
+        //if(!top){
+            //paint.setColor(ContextCompat.getColor(getContext(), R.color.pink));
+        //}
     }
 
     /**
@@ -202,7 +205,7 @@ public class MazePanel extends View implements P7PanelF22{
      */
     @Override
     public void addFilledPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-        paint.setStyle(Paint.Style.STROKE);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
         Path path = new Path();
         path.reset();
         if(xPoints != null & yPoints != null){
@@ -462,9 +465,15 @@ public class MazePanel extends View implements P7PanelF22{
         return Color.argb((float)a, (float)r, (float)g, (float)b);
     }
 
+    /**
+     * method used in FirstPersonView to get background color
+     * @param percentToExit
+     * @param top
+     * @return
+     */
     private int getBackgroundColor(float percentToExit, boolean top) {
-        return top? blend(Color.valueOf(lightPink), Color.valueOf(Pink), percentToExit) :
-                blend(Color.valueOf(Color.LTGRAY), Color.valueOf(greenWM), percentToExit);
+        return top? blend(Color.valueOf(DKGRAY), Color.valueOf(LTGRAY), percentToExit) :
+                Color.parseColor("#9F8772");
 
     }
     public static int createNewColor(float r, float g, float b, float a) {
@@ -506,6 +515,9 @@ public class MazePanel extends View implements P7PanelF22{
             }
         }
         return canvas;
+    }
+    public void setTop(boolean b){
+        top = b;
     }
 
 }

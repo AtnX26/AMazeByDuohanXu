@@ -72,8 +72,8 @@
         android:id="@+id/buttonStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
-        android:layout_marginTop="552dp"
+        android:layout_marginStart="284dp"
+        android:layout_marginTop="556dp"
         android:checked="false"
         android:text="Start driver"
         android:textOff="PAUSE"
@@ -152,4 +152,12 @@
         android:backgroundTint="@color/green"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="72dp"
+        android:layout_height="76dp"
+        app:srcCompat="@drawable/istockphoto_1249611748_612x612"
+        tools:layout_editor_absoluteX="169dp"
+        tools:layout_editor_absoluteY="512dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

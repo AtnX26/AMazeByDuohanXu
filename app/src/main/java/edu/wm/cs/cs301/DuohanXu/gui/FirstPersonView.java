@@ -229,8 +229,10 @@ public class FirstPersonView {
 		//graphics.fillRect(0, 0, viewWidth, viewHeight/2);
 		//graphics.setColor(ColorTheme.getColor(MazeColors.BACKGROUND_BOTTOM,percentToExit));
 		//graphics.fillRect(0, viewHeight/2, viewWidth, viewHeight/2);
+		panel.setTop(true);
 		panel.addBackground(percentToExit);
 		panel.addFilledRectangle(0, 0, viewWidth, viewHeight/2);
+		panel.setTop(false);
 		panel.addBackground(percentToExit);
 		panel.addFilledRectangle(0, viewHeight/2, viewWidth, viewHeight/2);
 	}

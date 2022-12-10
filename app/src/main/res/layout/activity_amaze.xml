@@ -7,9 +7,10 @@
     tools:context=".gui.AMazeActivity">
 
     <TextView
-        android:layout_width="182dp"
-        android:layout_height="48dp"
-        android:text="Welcome to the maze!"
+        android:layout_width="400dp"
+        android:layout_height="47dp"
+        android:text="Welcome to the maze of a lonely planet!!"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.149"
@@ -22,7 +23,7 @@
         android:layout_width="275dp"
         android:layout_height="34dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="356dp"
+        android:layout_marginTop="472dp"
         android:max="9"
         android:progress="0"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="340dp"
+        android:layout_marginTop="452dp"
         android:text="Maze Complexity:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -42,8 +43,8 @@
         android:id="@+id/Revisit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="556dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="632dp"
         android:text="Revisit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -52,8 +53,8 @@
         android:id="@+id/Explore"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="256dp"
-        android:layout_marginTop="556dp"
+        android:layout_marginStart="260dp"
+        android:layout_marginTop="632dp"
         android:text="Explore"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -62,7 +63,7 @@
         android:layout_width="154dp"
         android:layout_height="100dp"
         android:layout_marginStart="40dp"
-        android:layout_marginTop="404dp"
+        android:layout_marginTop="516dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -77,14 +78,15 @@
             android:id="@+id/builderSpinner"
             android:layout_width="125dp"
             android:layout_height="wrap_content"
+            android:minHeight="48dp"
             android:visibility="visible" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="135dp"
         android:layout_height="99dp"
-        android:layout_marginStart="220dp"
-        android:layout_marginTop="404dp"
+        android:layout_marginStart="224dp"
+        android:layout_marginTop="516dp"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -98,8 +100,38 @@
         <Spinner
             android:id="@+id/roomSpinner"
             android:layout_width="124dp"
-            android:layout_height="29dp" />
+            android:layout_height="48dp" />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView33"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="17dp"
+        android:layout_marginTop="113dp"
+        android:text="Driving a lonely spaceship, you have a mission to search for back-up energy on the planet. However, a maze of light blocked your way.."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="182dp"
+        android:text="Are you going to trust the super AI driver on the spaceship or yourself...?"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
+        android:layout_marginTop="261dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/download" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
