@@ -83,6 +83,10 @@ public class WallFollower implements RobotDriver {
 					Bundle bundle = new Bundle();
 					bundle.putBoolean("lost", lost);
 					bundle.putInt(KEY, (int) robot.getBatteryLevel());
+					bundle.putBoolean("front", robot.getDistanceSensor(Direction.FORWARD).getWorking());
+					bundle.putBoolean("back", robot.getDistanceSensor(Direction.BACKWARD).getWorking());
+					bundle.putBoolean("left", robot.getDistanceSensor(Direction.LEFT).getWorking());
+					bundle.putBoolean("right", robot.getDistanceSensor(Direction.RIGHT).getWorking());
 					message.setData(bundle);
 					PlayAnimationActivity.myHandler.sendMessage(message);
 				}

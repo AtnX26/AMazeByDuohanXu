@@ -137,7 +137,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="2dp"
         android:layout_marginTop="677dp"
-        android:text="Sensor1"
+        android:text="FRONT"
         android:backgroundTint="@color/green"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -148,7 +148,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="106dp"
         android:layout_marginTop="677dp"
-        android:text="Sensor2"
+        android:text="BACK"
         android:backgroundTint="@color/green"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -159,8 +159,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="209dp"
         android:layout_marginTop="677dp"
-        android:text="Sensor3"
-        android:backgroundTint="@color/red"
+        android:text="LEFT"
+        android:backgroundTint="@color/green"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -170,8 +170,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="313dp"
         android:layout_marginTop="677dp"
-        android:text="Sensor4"
-        android:backgroundTint="@color/red"
+        android:text="RIGHT"
+        android:backgroundTint="@color/green"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

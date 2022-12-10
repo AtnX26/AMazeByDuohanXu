@@ -1,6 +1,7 @@
 package edu.wm.cs.cs301.DuohanXu.gui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -43,6 +44,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
     public static Handler myHandler;
     private ProgressBar remainingEnergy;
     private TextView remainingEnergyText;
+    private Button sensor1,sensor2,sensor3,sensor4;
     private boolean isWizard = false;  // tells if the driver is the wizard algorithm
     private Maze maze;
     private int shortestPathLength;
@@ -77,6 +79,11 @@ public class PlayAnimationActivity extends AppCompatActivity {
          * Start drawing process encapsulated in the MazePanel class
          */
         remainingEnergyText = (TextView) findViewById(R.id.textView10);
+        sensor1 = (Button) findViewById(R.id.Sensor1);
+        sensor2 = (Button) findViewById(R.id.Sensor2);
+        sensor3 = (Button) findViewById(R.id.Sensor3);
+        sensor4 = (Button) findViewById(R.id.Sensor4);
+
         setProgressBar();
 
         sensorConfig = DataContainer.getRobotConfig();
@@ -108,10 +115,6 @@ public class PlayAnimationActivity extends AppCompatActivity {
          * in P7, now just assigned backgroundTint in xml to show different colors
          */
 
-        Button sensor1 = (Button) findViewById(R.id.Sensor1);
-        Button sensor2 = (Button) findViewById(R.id.Sensor2);
-        Button sensor3 = (Button) findViewById(R.id.Sensor3);
-        Button sensor4 = (Button) findViewById(R.id.Sensor4);
 
         /**
          * Seek bar for adjusting the map size. Communicate with the MazePanel later in P7
@@ -212,9 +215,21 @@ public class PlayAnimationActivity extends AppCompatActivity {
             public void handleMessage(Message msg){
                 Bundle bundle = msg.getData();
                 int remainingEnergyMessage = bundle.getInt(KEY, -1);
+                boolean status1 = bundle.getBoolean("front");
+                boolean status2 = bundle.getBoolean("back");
+                boolean status3 = bundle.getBoolean("left");
+                boolean status4 = bundle.getBoolean("right");
                 String[] sensorInfo = bundle.getStringArray(FAILURE_KEY);
                 if(remainingEnergyMessage != -1){
-                    updateProgressBar(remainingEnergyMessage);
+                    if (isWizard){
+                    updateProgressBar(remainingEnergyMessage);}
+                    else{
+                        updateProgressBar(remainingEnergyMessage);
+                        updateSensorStatus(status1,1);
+                        updateSensorStatus(status2,2);
+                        updateSensorStatus(status3,3);
+                        updateSensorStatus(status4,4);
+                    }
                 }
                 Log.v(tag, remainingEnergyMessage + "");
                 boolean lostGame = bundle.getBoolean("lost", false);
@@ -259,8 +274,27 @@ public class PlayAnimationActivity extends AppCompatActivity {
         this.remainingEnergy.setProgress(remainingEnergy);
         remainingEnergyText.setText("Remaining Energy: " + this.remainingEnergy.getProgress());
     }
+    private void updateSensorStatus(boolean Status, int i){
+        switch (i){
+            case 1:
+                if (Status) {sensor1.setTextColor(Color.GREEN);}
+                else {sensor1.setTextColor(Color.RED);}
+                break;
+            case 2:
+                if (Status) {sensor2.setTextColor(Color.GREEN);}
+                else {sensor2.setTextColor(Color.RED);}
+                break;
+            case 3:
+                if (Status) {sensor3.setTextColor(Color.GREEN);}
+                else {sensor3.setTextColor(Color.RED);}
+                break;
+            case 4:
+                if (Status) {sensor4.setTextColor(Color.GREEN);}
+                else {sensor4.setTextColor(Color.RED);}
+                break;
+        }
+    }
 
-    
     private void setAnimationSpeed(){
         final SeekBar animationSpeed1 = (SeekBar) findViewById(R.id.seekBarDriverSpeed);
         //final TextView skillLevelText = (TextView) findViewById(R.id.skillLevelTextView);
