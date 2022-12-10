@@ -54,7 +54,6 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
     protected MazeFactory factory;
     private Order.Builder builder;
     public static Maze maze;
-    private RevisitData Revisit;
     /**
      * Creates the activity by assigning view elements their jobs
      * @param savedInstanceState
@@ -97,6 +96,7 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
         confirmDriver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                confirmDriver.setText("Confirmed!");
                 if (rManual.isChecked()) {
                     Log.v(tag,"Manual driver selected");
                     selectedDriver = rManual.getText().toString();
@@ -130,6 +130,7 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
         confirmRobot.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                confirmRobot.setText("Confirmed!");
                 if (rPremium.isChecked()) {
                     Log.v(tag,"Premium robot selected");
                     selectedRobot = rPremium.getText().toString();
@@ -285,9 +286,9 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
             Random rand = new Random();
             seed = rand.nextInt();
         }
-        Revisit.setRevisit(skillLevel,bundle.getString("Maze Generator"),rooms,seed);
+        RevisitData.setRevisit(skillLevel,bundle.getString("Algorithm"),rooms,seed);
         if(revisit == true){
-            seed = Revisit.getSeed();
+            seed = RevisitData.getSeed();
         }
     }
     /**

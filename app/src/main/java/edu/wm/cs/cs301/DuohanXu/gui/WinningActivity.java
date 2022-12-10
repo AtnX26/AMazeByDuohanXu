@@ -39,9 +39,9 @@ public class WinningActivity extends AppCompatActivity {
          * Load information from the bundle to set on the screen
          */
         Bundle bundle = getIntent().getExtras();
-        pathlegnth = bundle.getInt("Path length");
-        energyconsumed = bundle.getInt("Energy consumed");
-        distance2exit = bundle.getInt("Distance to exit");
+        pathlegnth = DataContainer.getPathlength();
+        energyconsumed = DataContainer.getEnergyConsumption();
+        distance2exit = PlayManuallyActivity.shortestPathLength;
 
         /**
          * Connect texts in xml to WinningActivity that show message indicating playing result

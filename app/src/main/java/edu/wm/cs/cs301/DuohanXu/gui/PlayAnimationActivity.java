@@ -75,6 +75,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
         maze = GeneratingActivity.maze;
         int[] startPos = maze.getStartingPosition();
         shortestPathLength = maze.getDistanceToExit(startPos[0], startPos[1]) - 1;
+        PlayManuallyActivity.shortestPathLength = shortestPathLength;
         /**
          * Start drawing process encapsulated in the MazePanel class
          */
@@ -118,7 +119,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
 
         /**
          * Seek bar for adjusting the map size. Communicate with the MazePanel later in P7
-         */
+         *
         final SeekBar mapSize = (SeekBar) findViewById(R.id.seekBarMap);
         mapSize.setMin(1);
         mapSize.setProgress(10);
@@ -139,11 +140,11 @@ public class PlayAnimationActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Log.v(tag, "Map size changed to " + MapSize);
             }
-        });
+        });*/
 
         /**
          * Seek bar for adjusting the speed of animation. Communicate with the robot later in P7
-         */
+         *
         final SeekBar driverSpeed = (SeekBar) findViewById(R.id.seekBarDriverSpeed);
         driverSpeed.setMin(1);
         driverSpeed.setProgress(10);
@@ -164,7 +165,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Log.v(tag, "Driver speed changed to " + speed);
             }
-        });
+        });*/
 
         /**
          * Button for starting or pausing the robot
@@ -329,10 +330,9 @@ public class PlayAnimationActivity extends AppCompatActivity {
     }
     private void setSizeOfMap(){
         final SeekBar mapSize1 = (SeekBar) findViewById(R.id.seekBarMap);
-        //final TextView skillLevelText = (TextView) findViewById(R.id.skillLevelTextView);
-        mapSize1.setMin(1);
+        mapSize1.setMin(MIN_MAP_SIZE);
+        mapSize1.setProgress(15);
         mapSize1.setMax(MAX_MAP_SIZE);
-        mapSize1.setProgress(mapSize);
         mapSize1.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             int tempMapSize = 0;
 

@@ -34,6 +34,7 @@ public class Wizard implements RobotDriver{
 	private float batteryLevel1;
 	private int[] speedOptions;
 
+
 	public Wizard() {
 		robot = null;
 		maze = null;
@@ -76,9 +77,6 @@ public class Wizard implements RobotDriver{
 					try {
 						boolean facingExit = drive1Step2Exit();
 						if(!facingExit) {
-							while(!robot.canSeeThroughTheExitIntoEternity(Direction.FORWARD)) {
-								robot.rotate(Turn.LEFT);
-						    }
 							robot.move(1);
 							Log.v(TAG, "about to return true");
 							setGetsToExit(true);
@@ -88,6 +86,7 @@ public class Wizard implements RobotDriver{
 					}
 					catch(Exception e){
 						Log.v(TAG, "Error: Robot has run out of energy or crashed");
+						e.printStackTrace(System.out);
 						wizardThread = null;
 						lost = true;
 					}
@@ -142,8 +141,8 @@ public class Wizard implements RobotDriver{
 			return getsToExit;
 		}
 		catch(IndexOutOfBoundsException e) {
-			Log.v(TAG, "Error: Current Position Not In Maze5");
-			System.out.println("Error: Current Position Not In Maze5");
+			Log.v(TAG, "Error: Current Position Not In Maze");
+			System.out.println("Error: Current Position Not In Maze");
 		}
 		return false;
 	}
@@ -174,6 +173,7 @@ public class Wizard implements RobotDriver{
 					currentPos = robot.getCurrentPosition();
 					sensor = new ReliableSensor();
 					sensor.setMaze(maze);
+					sensor.setSensorDirection(Direction.FORWARD);
 					batteryLevel1 = robot.getBatteryLevel();
 					float[] batteryLevel = new float[]{batteryLevel1};
 					while(sensor.distanceToObstacle(currentPos, robot.getCurrentDirection(), batteryLevel) != Integer.MAX_VALUE){

@@ -104,7 +104,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
 
         /**
          * The short cut to the WinningActivity
-         */
+         *
         Button ShortCut = (Button) findViewById(R.id.ShortCut);
         ShortCut.setOnClickListener(new View.OnClickListener() {
             //Create new event when clicked; only shows log for P6
@@ -113,7 +113,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
                 Log.v(tag, "ShortCut clicked, jump to the winning state");
                 startWinningActivity(this);
             }
-        });
+        });*/
 
         /**
          * Three toggles that adjust the visibility of maze ,etc.
@@ -195,7 +195,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
     private void setMapSize(int size){
         mapSize = size;
         statePlaying.setMapScale(mapSize);
-        //Log.v("Map Size: " + mapSize);
+        Log.v(tag, "Map Size: " + mapSize);
     }
     /**
      * Private helper method for the short cut
@@ -214,7 +214,7 @@ public class PlayManuallyActivity extends AppCompatActivity {
     }
 
     public void sendWinningMessage(View view){
-        //DataHolder.setPathlength(pathlength);
+        DataContainer.setPathlength(pathlegnth);
         Intent intent = new Intent(this, WinningActivity.class);
         //Bundle bundle = getIntent().getExtras();
         //bundle.putInt("Path Length", pathLength);

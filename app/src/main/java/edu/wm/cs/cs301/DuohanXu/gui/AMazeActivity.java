@@ -83,7 +83,7 @@ public class AMazeActivity extends AppCompatActivity {
         revisitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (RevisitData.getAlgorithm() == null){
+                if (RevisitData.getSeed() == 0){
                 Toast.makeText(getApplicationContext(), "No data from last exploration!", Toast.LENGTH_SHORT).show();}
                 else{
                 Intent intent = new Intent(getApplicationContext(), GeneratingActivity.class);

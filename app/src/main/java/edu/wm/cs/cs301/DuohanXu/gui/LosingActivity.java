@@ -42,11 +42,15 @@ public class LosingActivity extends AppCompatActivity {
          * Load information from the bundle to set on the screen
          */
         Bundle bundle = getIntent().getExtras();
-        pathlegnth = bundle.getInt("Path length");
-        energyconsumed = bundle.getInt("Energy consumed");
-        distance2exit = bundle.getInt("Distance to exit");
-        reason = bundle.getString("Lose reason");
-
+        pathlegnth = DataContainer.getPathlength();
+        energyconsumed = DataContainer.getEnergyConsumption();
+        distance2exit = PlayManuallyActivity.shortestPathLength;
+        if (energyconsumed >=3500){
+            reason="Lost Reason: Lack of energy";
+        }
+        else{
+        reason="Lost Reason: Robot is broken";
+        }
         /**
          * Connect texts in xml to LosingActivity that show message indicating playing result
          */

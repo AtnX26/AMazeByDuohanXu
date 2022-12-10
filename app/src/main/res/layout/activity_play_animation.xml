@@ -18,8 +18,8 @@
 
     <TextView
         android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="210dp"
+        android:layout_height="24dp"
         android:layout_marginStart="18dp"
         android:layout_marginTop="84dp"
         android:text="Remaining robot energy:"
@@ -106,28 +106,6 @@
         android:layout_height="383dp"
         android:layout_marginStart="18dp"
         android:layout_marginTop="161dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonGo2Winning"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="182dp"
-        android:layout_marginTop="61dp"
-        android:text="Go2Winning"
-        android:textSize="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/buttonGo2Losing"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="295dp"
-        android:layout_marginTop="62dp"
-        android:text="Go2Losing"
-        android:textSize="10dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
