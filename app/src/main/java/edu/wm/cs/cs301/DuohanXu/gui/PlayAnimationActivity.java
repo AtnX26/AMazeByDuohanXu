@@ -42,6 +42,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
     boolean[] reliableSensor;
     public static Handler myHandler;
     private ProgressBar remainingEnergy;
+    private TextView remainingEnergyText;
     private boolean isWizard = false;  // tells if the driver is the wizard algorithm
     private Maze maze;
     private int shortestPathLength;
@@ -75,7 +76,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
         /**
          * Start drawing process encapsulated in the MazePanel class
          */
-
+        remainingEnergyText = (TextView) findViewById(R.id.textView10);
         setProgressBar();
 
         sensorConfig = DataContainer.getRobotConfig();
@@ -240,19 +241,6 @@ public class PlayAnimationActivity extends AppCompatActivity {
         });
 
 
-        /**
-         * Progress bar to show remaining robot energy
-         * Set to 0 because of the context that the robot runs out of energy,
-         * passing the reason "Lack of energy" to LosingActivity
-         * Will communicate with actual robot class in P7
-         */
-        ProgressBar progressBar = (ProgressBar) findViewById(R.id.robotEnergy);
-        progressBar.setMax(100);
-        progressBar.setProgress(0);
-
-
-
-
     }
 
     /////////private methods below/////////
@@ -262,7 +250,7 @@ public class PlayAnimationActivity extends AppCompatActivity {
         remainingEnergy = (ProgressBar) findViewById(R.id.robotEnergy);
         remainingEnergy.setMax(3500);
         remainingEnergy.setProgress(3500);
-        final TextView remainingEnergyText = (TextView) findViewById(R.id.textView10);
+
         remainingEnergyText.setText("Remaining Energy: " + remainingEnergy.getProgress());
     }
 
@@ -271,6 +259,8 @@ public class PlayAnimationActivity extends AppCompatActivity {
         this.remainingEnergy.setProgress(remainingEnergy);
         remainingEnergyText.setText("Remaining Energy: " + this.remainingEnergy.getProgress());
     }
+
+    
     private void setAnimationSpeed(){
         final SeekBar animationSpeed1 = (SeekBar) findViewById(R.id.seekBarDriverSpeed);
         //final TextView skillLevelText = (TextView) findViewById(R.id.skillLevelTextView);

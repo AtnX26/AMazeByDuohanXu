@@ -234,7 +234,7 @@ public class GeneratingActivity extends AppCompatActivity implements Order {
                 /**
                  * Handles scenarios in which PlayAnimationActivity will be called
                  */
-                else if (selectedDriver.equals("Wall Follower")||selectedDriver.equals("Wizard")) {
+                else if (selectedDriver.equals("WallFollower")||selectedDriver.equals("Wizard")) {
                     if (selectedRobot == null){
                         Toast.makeText(getBaseContext(), "Please select a robot first!", Toast.LENGTH_SHORT).show();
                         Log.v(tag, "Selection reminder popped up");}
